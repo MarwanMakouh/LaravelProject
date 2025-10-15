@@ -122,14 +122,26 @@
         <a class="navbar-brand fw-bold" href="{{ url('/') }}">🎮 GamePortal</a>
 
         <ul class="navbar-nav me-auto mb-0">
-            <li class="nav-item"><a class="nav-link" href="{{ url('/news') }}">Nieuws</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/community') }}">Community</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url('/faq') }}">FAQ</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url('/contact') }}">Contact</a></li>
         </ul>
 
         <ul class="navbar-nav ms-auto mb-0">
-            <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Registreren</a></li>
+            @auth
+                <li class="nav-item">
+                    <span class="nav-link" style="cursor: default;">Welkom, {{ Auth::user()->name }}</span>
+                </li>
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">Uitloggen</button>
+                    </form>
+                </li>
+            @else
+                <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registreren</a></li>
+            @endauth
             <li class="nav-item">
                 <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
                     <span id="theme-icon">☀️</span>

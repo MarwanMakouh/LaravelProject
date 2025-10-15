@@ -16,6 +16,11 @@
             padding: 0;
         }
 
+        /* Default dark theme background */
+        body {
+            background-color: #1a1a1a !important;
+        }
+
         /* Light theme styles */
         body.light-theme {
             background-color: #ffffff !important;
