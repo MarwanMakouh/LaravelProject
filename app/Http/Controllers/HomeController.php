@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\RawgApiService;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -13,10 +14,25 @@ class HomeController extends Controller
         $this->rawgApi = $rawgApi;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $games = $this->rawgApi->getPopularGames(9);
+        $search = $request->get('search');
+        $result = $this->rawgApi->getGames(1, 9, $search);
 
-        return view('home', compact('games'));
+        return view('home', [
+            'games' => $result['games'],
+            'hasMore' => $result['hasMore'],
+            'search' => $search,
+        ]);
+    }
+
+    public function loadMore(Request $request)
+    {
+        $page = $request->get('page', 1);
+        $search = $request->get('search');
+
+        $result = $this->rawgApi->getGames($page, 9, $search);
+
+        return response()->json($result);
     }
 }

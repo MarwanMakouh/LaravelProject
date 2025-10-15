@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/api/games/load-more', [HomeController::class, 'loadMore'])->name('games.loadMore');
 Route::view('/news', 'news.index')->name('news.index');
 Route::view('/faq', 'faq.index')->name('faq.index');
 Route::view('/contact', 'contact.form')->name('contact.form');

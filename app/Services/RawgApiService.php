@@ -38,6 +38,43 @@ class RawgApiService
     }
 
     /**
+     * Haal games op met paginering en optionele zoekterm
+     */
+    public function getGames($page = 1, $pageSize = 9, $search = null)
+    {
+        $params = [
+            'key' => $this->apiKey,
+            'page' => $page,
+            'page_size' => $pageSize,
+            'ordering' => '-rating',
+        ];
+
+        if ($search) {
+            $params['search'] = $search;
+            $params['search_exact'] = false;
+        } else {
+            $params['metacritic'] = '80,100';
+        }
+
+        $response = Http::get("{$this->baseUrl}/games", $params);
+
+        if ($response->successful()) {
+            $data = $response->json();
+            return [
+                'games' => $this->formatGames($data['results']),
+                'hasMore' => !empty($data['next']),
+                'total' => $data['count'] ?? 0,
+            ];
+        }
+
+        return [
+            'games' => [],
+            'hasMore' => false,
+            'total' => 0,
+        ];
+    }
+
+    /**
      * Formatteer de API response naar een consistente structuur
      */
     protected function formatGames($games)

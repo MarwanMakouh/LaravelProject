@@ -85,6 +85,25 @@
         color: #000000 !important;
     }
 
+    /* Theme toggle button */
+    .theme-toggle {
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-left: 0.5rem;
+    }
+
+    .theme-toggle:hover {
+        background-color: #000000;
+        color: #ffffff;
+        border: 2px solid #ffffff;
+    }
+
     /* Responsive aanpassingen */
     @media (max-width: 768px) {
         .navbar .container-fluid {
@@ -111,6 +130,11 @@
         <ul class="navbar-nav ms-auto mb-0">
             <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Registreren</a></li>
+            <li class="nav-item">
+                <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
+                    <span id="theme-icon">☀️</span>
+                </button>
+            </li>
         </ul>
     </div>
 </nav>
