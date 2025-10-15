@@ -1,0 +1,165 @@
+@import '../../node_modules/tailwindcss/dist/lib.d.mts';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Custom GamePortal Styling */
+
+/* Reset voor zwarte achtergrond overal */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    background-color: #000000 !important;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Navbar styling - volledig edge-to-edge */
+.navbar {
+    background-color: #000000 !important;
+    padding: 1rem 0;
+    margin: 0;
+    width: 100%;
+}
+
+.navbar .container-fluid {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 100%;
+}
+
+.navbar-brand {
+    color: #ffffff !important;
+    transition: all 0.3s ease;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.navbar-brand:hover {
+    background-color: #ffffff;
+    color: #000000 !important;
+}
+
+.nav-link {
+    color: #ffffff !important;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+    padding: 8px 15px !important;
+    margin: 0 5px;
+}
+
+.nav-link:hover {
+    background-color: #ffffff;
+    color: #000000 !important;
+}
+
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar-nav.ms-auto {
+    margin-left: auto !important;
+}
+
+.nav-item {
+    display: inline-block;
+}
+
+/* Content styling */
+main.container {
+    background-color: #000000;
+    color: #ffffff;
+    margin-top: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* Titel links uitlijnen */
+h1 {
+    text-align: left !important;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+p.text-center {
+    text-align: left !important;
+    margin-bottom: 2rem;
+}
+
+/* Game cards styling */
+.card {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    color: #ffffff;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #555;
+}
+
+.card-body {
+    background-color: #1a1a1a;
+}
+
+.card-title {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.btn-primary {
+    background-color: #6c63ff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #5a52d5;
+}
+
+/* Footer styling */
+footer {
+    background-color: #000000;
+    border-top: 1px solid #333 !important;
+    color: #999;
+    margin-top: 3rem;
+}
+
+.text-muted {
+    color: #999 !important;
+}
+
+/* Grid responsive aanpassingen */
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+@media (max-width: 768px) {
+    .col-md-4 {
+        margin-bottom: 1.5rem;
+    }
+}
