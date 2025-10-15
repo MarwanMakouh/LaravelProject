@@ -9,6 +9,13 @@
             font-family: Arial, sans-serif;
         }
 
+        /* Main container styling */
+        .container {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         /* Light theme styles */
         body.light-theme {
             background-color: #ffffff !important;

@@ -21,15 +21,31 @@
             margin-bottom: 1rem;
         }
 
+        /* Header with search */
+        .header-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 3rem;
+            flex-wrap: wrap;
+            padding: 0 1rem;
+        }
+
+        .header-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
         /* Search bar styling */
         .search-container {
-            margin-bottom: 2rem;
+            flex: 1;
+            max-width: 500px;
         }
 
         .search-form {
             display: flex;
             gap: 1rem;
-            max-width: 600px;
         }
 
         .search-input {
@@ -119,12 +135,13 @@
             flex-wrap: wrap;
             gap: 1.5rem;
             margin: 0;
+            padding: 0 1rem;
         }
 
         .col-md-4 {
             flex: 1;
-            min-width: 300px;
-            max-width: calc(33.333% - 1rem);
+            min-width: 280px;
+            max-width: calc(25% - 1.5rem);
         }
 
         /* Game card styling */
@@ -201,9 +218,15 @@
         }
 
         /* Responsive aanpassingen */
+        @media (max-width: 1400px) {
+            .col-md-4 {
+                max-width: calc(33.333% - 1.5rem);
+            }
+        }
+
         @media (max-width: 992px) {
             .col-md-4 {
-                max-width: calc(50% - 1rem);
+                max-width: calc(50% - 1.5rem);
             }
         }
 
@@ -218,24 +241,28 @@
         }
     </style>
 
-    <h1 class="mb-4">🎮 Welkom bij GamePortal</h1>
-    <p class="text-muted">Ontdek de nieuwste games, nieuws en community-reacties!</p>
+    <div class="header-container">
+        <div class="header-text">
+            <h1 class="mb-2">🎮 Welkom bij GamePortal</h1>
+            <p class="text-muted">Ontdek de nieuwste games, nieuws en community-reacties!</p>
+        </div>
 
-    <!-- Search Bar -->
-    <div class="search-container">
-        <form action="{{ route('home') }}" method="GET" class="search-form">
-            <input
-                type="text"
-                name="search"
-                class="search-input"
-                placeholder="Zoek naar games..."
-                value="{{ $search ?? '' }}"
-            >
-            <button type="submit" class="search-btn">Zoeken</button>
-            @if($search)
-                <a href="{{ route('home') }}" class="clear-btn" style="text-decoration: none; display: flex; align-items: center;">Wissen</a>
-            @endif
-        </form>
+        <!-- Search Bar -->
+        <div class="search-container">
+            <form action="{{ route('home') }}" method="GET" class="search-form">
+                <input
+                    type="text"
+                    name="search"
+                    class="search-input"
+                    placeholder="Zoek naar games..."
+                    value="{{ $search ?? '' }}"
+                >
+                <button type="submit" class="search-btn">Zoeken</button>
+                @if($search)
+                    <a href="{{ route('home') }}" class="clear-btn" style="text-decoration: none; display: flex; align-items: center;">Wissen</a>
+                @endif
+            </form>
+        </div>
     </div>
 
     <div class="row mt-4" id="games-container">
