@@ -117,20 +117,8 @@
     <p class="text-muted">Ontdek de nieuwste games, nieuws en community-reacties!</p>
 
     <div class="row mt-4">
-        @php
-            $games = [
-              ['name' => 'Elden Ring', 'released' => '2022-02-25', 'rating' => 4.8, 'background_image' => 'https://images.rawg.io/media/games/456/456dea5e1c7e3cd07060c14e96612001.jpg'],
-              ['name' => 'Cyberpunk 2077', 'released' => '2020-12-10', 'rating' => 3.9, 'background_image' => 'https://images.rawg.io/media/games/73e/73e3dc2a6ff8cbd2f76e5b2a29f52ac9.jpg'],
-              ['name' => 'Hollow Knight', 'released' => '2017-02-24', 'rating' => 4.6, 'background_image' => 'https://images.rawg.io/media/games/fd9/fd92a9a8d054d9f54dce7d4e5bdf6a07.jpg'],
-              ['name' => 'The Witcher 3', 'released' => '2015-05-19', 'rating' => 4.7, 'background_image' => 'https://images.rawg.io/media/games/618/618c2031a07bbff6b4f611f10b6bcdbc.jpg'],
-              ['name' => 'God of War', 'released' => '2018-04-20', 'rating' => 4.6, 'background_image' => 'https://images.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg'],
-              ['name' => 'Red Dead Redemption 2', 'released' => '2018-10-26', 'rating' => 4.6, 'background_image' => 'https://images.rawg.io/media/games/511/5118aff5091cb3efec399c808f8c598f.jpg'],
-              ['name' => 'Minecraft', 'released' => '2011-11-18', 'rating' => 4.4, 'background_image' => 'https://images.rawg.io/media/games/b4e/b4e4c73d5aa4ec66bbf75375c4847a2b.jpg'],
-              ['name' => 'GTA V', 'released' => '2013-09-17', 'rating' => 4.5, 'background_image' => 'https://images.rawg.io/media/games/456/456dea5e1c7e3cd07060c14e96612001.jpg'],
-              ['name' => 'Stardew Valley', 'released' => '2016-02-26', 'rating' => 4.5, 'background_image' => 'https://images.rawg.io/media/games/713/713269608dc8f2f40f5a670a14b2de94.jpg'],
-            ];
-        @endphp
-        @foreach($games as $game)
+        @if(count($games) > 0)
+            @foreach($games as $game)
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
                     <img src="{{ $game['background_image'] }}" class="card-img-top" alt="{{ $game['name'] }}">
@@ -142,6 +130,11 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+            @endforeach
+        @else
+            <div class="col-12 text-center">
+                <p style="color: #ffffff;">Geen games gevonden. Controleer je API configuratie.</p>
+            </div>
+        @endif
     </div>
 @endsection
