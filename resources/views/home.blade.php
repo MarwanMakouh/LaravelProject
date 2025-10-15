@@ -10,14 +10,14 @@
 
         h1 {
             color: #ffffff;
-            text-align: left;
+            text-align: center;
             margin-bottom: 1rem;
             font-size: 2.5rem;
         }
 
         p.text-muted {
             color: #cccccc !important;
-            text-align: left;
+            text-align: center;
             margin-bottom: 1rem;
         }
 
@@ -35,6 +35,7 @@
         .header-text {
             flex: 1;
             min-width: 300px;
+            text-align: center;
         }
 
         /* Search bar styling */
@@ -154,10 +155,25 @@
             height: 100%;
         }
 
+        body.light-theme .card {
+            background-color: #F9FAFB;
+            border: 1px solid #000000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .card-info-section {
+            background-color: #F3F4F6;
+        }
+
         .card:hover {
             transform: translateY(-10px);
             border-color: #ffffff;
             box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        body.light-theme .card:hover {
+            border-color: #000000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .card-img-top {
