@@ -56,15 +56,19 @@
     }
 
     .big-text {
-        color: #6366f1;
+        color: #ffffff;
         font-size: 2rem;
         font-weight: bold;
         margin: 0.5rem 0;
     }
 
     .info-card small {
-        color: #999;
+        color: #cccccc;
         font-size: 0.85rem;
+    }
+
+    body.light-theme .big-text {
+        color: #6366f1;
     }
 
     body.light-theme .info-card {
