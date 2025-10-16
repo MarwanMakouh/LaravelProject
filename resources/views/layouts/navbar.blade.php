@@ -70,6 +70,109 @@
         display: inline-block;
     }
 
+    /* Search bar in navbar */
+    .navbar-search {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .navbar-search-input {
+        padding: 8px 16px;
+        border: 2px solid #ffffff;
+        border-radius: 5px;
+        background-color: #000000;
+        color: #ffffff;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        width: 250px;
+    }
+
+    .navbar-search-input:focus {
+        outline: none;
+        background-color: #333333;
+        width: 300px;
+    }
+
+    .navbar-search-input::placeholder {
+        color: #888;
+    }
+
+    body.light-theme .navbar-search-input {
+        background-color: #ffffff;
+        color: #000000;
+        border-color: #000000;
+    }
+
+    body.light-theme .navbar-search-input:focus {
+        background-color: #f5f5f5;
+    }
+
+    .navbar-search-btn {
+        padding: 8px 20px;
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar-search-btn:hover {
+        background-color: #000000;
+        color: #ffffff;
+        border: 2px solid #ffffff;
+    }
+
+    body.light-theme .navbar-search-btn {
+        background-color: #000000;
+        color: #ffffff;
+    }
+
+    body.light-theme .navbar-search-btn:hover {
+        background-color: #ffffff;
+        color: #000000;
+        border: 2px solid #000000;
+    }
+
+    .navbar-clear-btn {
+        padding: 8px 16px;
+        background-color: #444;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        white-space: nowrap;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar-clear-btn:hover {
+        background-color: #555;
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    body.light-theme .navbar-clear-btn {
+        background-color: #ddd;
+        color: #000000;
+    }
+
+    body.light-theme .navbar-clear-btn:hover {
+        background-color: #ccc;
+    }
+
     .nav-link {
         color: #ffffff !important;
         transition: all 0.3s ease;
@@ -105,6 +208,38 @@
     }
 
     /* Responsive aanpassingen */
+    @media (max-width: 1200px) {
+        .navbar-search-input {
+            width: 180px;
+        }
+
+        .navbar-search-input:focus {
+            width: 220px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .navbar .container-fluid {
+            flex-wrap: wrap;
+        }
+
+        .navbar-search {
+            order: 3;
+            width: 100%;
+            margin: 1rem 0 0 0;
+            justify-content: center;
+        }
+
+        .navbar-search-input {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .navbar-search-input:focus {
+            width: 100%;
+        }
+    }
+
     @media (max-width: 768px) {
         .navbar .container-fluid {
             flex-direction: column;
@@ -113,6 +248,22 @@
 
         .navbar-nav.me-auto {
             margin-left: 0;
+        }
+
+        .navbar-search {
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .navbar-search-input {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .navbar-search-btn,
+        .navbar-clear-btn {
+            width: 100%;
         }
     }
 </style>
@@ -126,6 +277,22 @@
             <li class="nav-item"><a class="nav-link" href="{{ url('/faq') }}">FAQ</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url('/contact') }}">Contact</a></li>
         </ul>
+
+        @if(request()->is('/'))
+        <form action="{{ route('home') }}" method="GET" class="navbar-search">
+            <input
+                type="text"
+                name="search"
+                class="navbar-search-input"
+                placeholder="Zoek games..."
+                value="{{ request('search') }}"
+            >
+            <button type="submit" class="navbar-search-btn">Zoek</button>
+            @if(request('search'))
+                <a href="{{ route('home') }}" class="navbar-clear-btn">Wis</a>
+            @endif
+        </form>
+        @endif
 
         <ul class="navbar-nav ms-auto mb-0">
             @auth
