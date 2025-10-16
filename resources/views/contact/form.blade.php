@@ -4,6 +4,19 @@
 
 @section('content')
 <style>
+    .contact-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 500px) {
+        .contact-container {
+            padding: 0 1rem;
+        }
+    }
+
     .contact-header {
         text-align: center;
         margin-bottom: 40px;
@@ -142,12 +155,13 @@
     }
 </style>
 
-<div class="contact-header">
-    <h1>📧 Contact</h1>
-    <p>Heb je een vraag of opmerking? Laat het ons weten!</p>
-</div>
+<div class="contact-container">
+    <div class="contact-header">
+        <h1>📧 Contact</h1>
+        <p>Heb je een vraag of opmerking? Laat het ons weten!</p>
+    </div>
 
-<div class="contact-form-container">
+    <div class="contact-form-container">
     <form>
         <div class="form-group">
             <label for="name" class="form-label">Naam *</label>
@@ -203,5 +217,6 @@
         <p>Of neem direct contact op via:<br>
         <strong>info@gameportal.nl</strong></p>
     </div>
+</div>
 </div>
 @endsection

@@ -4,6 +4,19 @@
 
 @section('content')
 <style>
+    .faq-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 500px) {
+        .faq-container {
+            padding: 0 1rem;
+        }
+    }
+
     .faq-header {
         text-align: center;
         margin-bottom: 40px;
@@ -76,12 +89,13 @@
     }
 </style>
 
-<div class="faq-header">
-    <h1>❓ Veelgestelde Vragen</h1>
-    <p>Vind antwoorden op de meest gestelde vragen</p>
-</div>
+<div class="faq-container">
+    <div class="faq-header">
+        <h1>❓ Veelgestelde Vragen</h1>
+        <p>Vind antwoorden op de meest gestelde vragen</p>
+    </div>
 
-<div class="faq-item">
+    <div class="faq-item">
     <div class="faq-question">Hoe maak ik een account aan?</div>
     <div class="faq-answer">
         Klik rechtsboven op "Registreren" en vul het formulier in met je naam, e-mailadres en een wachtwoord. Na registratie ben je direct ingelogd!
@@ -121,5 +135,6 @@
     <div class="faq-answer">
         GamePortal is een informatieplatform. We bieden informatie over games, maar de games zelf moeten via de officiële platforms worden gespeeld.
     </div>
+</div>
 </div>
 @endsection

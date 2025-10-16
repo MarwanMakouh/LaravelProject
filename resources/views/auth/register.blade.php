@@ -4,6 +4,19 @@
 
 @section('content')
 <style>
+    .auth-wrapper {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 500px) {
+        .auth-wrapper {
+            padding: 0 1rem;
+        }
+    }
+
     .auth-container {
         max-width: 450px;
         margin: 50px auto;
@@ -178,8 +191,9 @@
     }
 </style>
 
-<div class="auth-container">
-    <h1 class="auth-title">Registreren</h1>
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <h1 class="auth-title">Registreren</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -263,6 +277,7 @@
 
     <div class="auth-links">
         Heb je al een account? <a href="{{ route('login') }}">Log hier in</a>
+    </div>
     </div>
 </div>
 @endsection

@@ -343,6 +343,7 @@
     @media (max-width: 768px) {
         .navbar-toggler {
             display: block;
+            margin-bottom: 5px;
         }
 
         .navbar-collapse {
@@ -350,7 +351,7 @@
             width: 100%;
             flex-direction: column;
             align-items: flex-start;
-            margin-top: 1rem;
+            margin-top: 5px;
         }
 
         .navbar-collapse.show {
