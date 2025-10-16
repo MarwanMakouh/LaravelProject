@@ -26,7 +26,7 @@
         padding-left: 0;
         padding-right: 0;
         box-sizing: border-box;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 0.5rem;
     }
 
@@ -181,11 +181,42 @@
         text-decoration: none;
         display: inline-block;
         white-space: nowrap;
+        box-sizing: border-box;
     }
 
     .nav-link:hover {
         background-color: #ffffff;
         color: #000000 !important;
+    }
+
+    /* User welcome styling */
+    .user-welcome {
+        cursor: default;
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+
+    /* Logout button styling */
+    .logout-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    body.light-theme .logout-btn {
+        background-color: #ffffff;
+        color: #000000 !important;
+    }
+
+    body.light-theme .logout-btn:hover {
+        background-color: #000000;
+        color: #ffffff !important;
+    }
+
+    @media (max-width: 768px) {
+        .user-welcome {
+            margin-top: 1rem;
+        }
     }
 
     /* Theme toggle button */
@@ -205,6 +236,75 @@
         background-color: #000000;
         color: #ffffff;
         border: 2px solid #ffffff;
+    }
+
+    /* Hamburger menu styling */
+    .navbar-toggler {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        margin-left: auto;
+    }
+
+    .navbar-toggler-icon {
+        display: block;
+        width: 30px;
+        height: 3px;
+        background-color: #ffffff;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-toggler-icon::before,
+    .navbar-toggler-icon::after {
+        content: '';
+        display: block;
+        width: 30px;
+        height: 3px;
+        background-color: #ffffff;
+        position: absolute;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-toggler-icon::before {
+        top: -8px;
+    }
+
+    .navbar-toggler-icon::after {
+        top: 8px;
+    }
+
+    body.light-theme .navbar-toggler-icon,
+    body.light-theme .navbar-toggler-icon::before,
+    body.light-theme .navbar-toggler-icon::after {
+        background-color: #000000;
+    }
+
+    /* Active state voor hamburger (X vorm) */
+    .navbar-toggler.active .navbar-toggler-icon {
+        background-color: transparent;
+    }
+
+    .navbar-toggler.active .navbar-toggler-icon::before {
+        transform: rotate(45deg);
+        top: 0;
+    }
+
+    .navbar-toggler.active .navbar-toggler-icon::after {
+        transform: rotate(-45deg);
+        top: 0;
+    }
+
+    .navbar-collapse {
+        display: flex;
+        align-items: center;
+        flex: 1;
+    }
+
+    .navbar-brand {
+        flex-shrink: 0;
     }
 
     /* Responsive aanpassingen */
@@ -241,19 +341,59 @@
     }
 
     @media (max-width: 768px) {
-        .navbar .container-fluid {
+        .navbar-toggler {
+            display: block;
+        }
+
+        .navbar-collapse {
+            display: none;
+            width: 100%;
             flex-direction: column;
-            gap: 1rem;
+            align-items: flex-start;
+            margin-top: 1rem;
+        }
+
+        .navbar-collapse.show {
+            display: flex;
+        }
+
+        .navbar .container-fluid {
+            flex-wrap: wrap;
+        }
+
+        .navbar-nav {
+            flex-direction: column;
+            width: 100%;
+            gap: 0;
         }
 
         .navbar-nav.me-auto {
             margin-left: 0;
+            margin-bottom: 1rem;
+        }
+
+        .navbar-nav.ms-auto {
+            margin-left: 0;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .nav-item {
+            width: 100%;
+        }
+
+        .nav-link {
+            display: block;
+            width: 100%;
+            padding: 12px 15px !important;
         }
 
         .navbar-search {
             flex-direction: column;
             gap: 0.5rem;
             width: 100%;
+            margin: 0;
+            order: initial;
         }
 
         .navbar-search-input {
@@ -265,6 +405,12 @@
         .navbar-clear-btn {
             width: 100%;
         }
+
+        .theme-toggle {
+            width: 100%;
+            margin-left: 0;
+            margin-top: 0.5rem;
+        }
     }
 </style>
 
@@ -272,48 +418,76 @@
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="{{ url('/') }}">🎮 GamePortal</a>
 
-        <ul class="navbar-nav me-auto mb-0">
-            <li class="nav-item"><a class="nav-link" href="{{ url('/community') }}">Community</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url('/faq') }}">FAQ</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url('/contact') }}">Contact</a></li>
-        </ul>
+        <button class="navbar-toggler" type="button" onclick="toggleNavbar()">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        @if(request()->is('/'))
-        <form action="{{ route('home') }}" method="GET" class="navbar-search">
-            <input
-                type="text"
-                name="search"
-                class="navbar-search-input"
-                placeholder="Zoek games..."
-                value="{{ request('search') }}"
-            >
-            <button type="submit" class="navbar-search-btn">Zoek</button>
-            @if(request('search'))
-                <a href="{{ route('home') }}" class="navbar-clear-btn">Wis</a>
+        <div class="navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-0">
+                <li class="nav-item"><a class="nav-link" href="{{ url('/community') }}">Community</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/faq') }}">FAQ</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/contact') }}">Contact</a></li>
+            </ul>
+
+            @if(request()->is('/'))
+            <form action="{{ route('home') }}" method="GET" class="navbar-search">
+                <input
+                    type="text"
+                    name="search"
+                    class="navbar-search-input"
+                    placeholder="Zoek games..."
+                    value="{{ request('search') }}"
+                >
+                <button type="submit" class="navbar-search-btn">Zoek</button>
+                @if(request('search'))
+                    <a href="{{ route('home') }}" class="navbar-clear-btn">Wis</a>
+                @endif
+            </form>
             @endif
-        </form>
-        @endif
 
-        <ul class="navbar-nav ms-auto mb-0">
-            @auth
+            <ul class="navbar-nav ms-auto mb-0">
+                @auth
+                    <li class="nav-item">
+                        <span class="nav-link user-welcome">Welkom, {{ Auth::user()->name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}" style="display: inline; width: 100%;">
+                            @csrf
+                            <button type="submit" class="nav-link logout-btn">Uitloggen</button>
+                        </form>
+                    </li>
+                @else
+                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registreren</a></li>
+                @endauth
                 <li class="nav-item">
-                    <span class="nav-link" style="cursor: default;">Welkom, {{ Auth::user()->name }}</span>
+                    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
+                        <span id="theme-icon">☀️</span>
+                    </button>
                 </li>
-                <li class="nav-item">
-                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                        @csrf
-                        <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">Uitloggen</button>
-                    </form>
-                </li>
-            @else
-                <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registreren</a></li>
-            @endauth
-            <li class="nav-item">
-                <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
-                    <span id="theme-icon">☀️</span>
-                </button>
-            </li>
-        </ul>
+            </ul>
+        </div>
     </div>
 </nav>
+
+<script>
+    function toggleNavbar() {
+        const navbarContent = document.getElementById('navbarContent');
+        const toggler = document.querySelector('.navbar-toggler');
+
+        navbarContent.classList.toggle('show');
+        toggler.classList.toggle('active');
+    }
+
+    // Sluit navbar wanneer je op een link klikt (optioneel)
+    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                const navbarContent = document.getElementById('navbarContent');
+                const toggler = document.querySelector('.navbar-toggler');
+                navbarContent.classList.remove('show');
+                toggler.classList.remove('active');
+            }
+        });
+    });
+</script>
