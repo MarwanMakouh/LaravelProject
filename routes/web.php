@@ -3,11 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommunityController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/api/games/load-more', [HomeController::class, 'loadMore'])->name('games.loadMore');
-Route::view('/community', 'news.index')->name('community.index');
+Route::get('/community', [CommunityController::class, 'index'])->name('community.index');
+Route::get('/community/{id}', [CommunityController::class, 'show'])->name('community.show');
 Route::view('/faq', 'faq.index')->name('faq.index');
 Route::view('/contact', 'contact.form')->name('contact.form');
 

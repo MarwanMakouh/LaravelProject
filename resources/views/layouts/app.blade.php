@@ -150,9 +150,7 @@
     @yield('content')
 </main>
 
-<footer class="text-center mt-5 py-3 border-top">
-    <p class="text-muted mb-0">&copy; {{ date('Y') }} GamePortal - gemaakt met Laravel</p>
-</footer>
+@include('layouts.footer')
 
 <script>
     // Theme toggle functionaliteit

@@ -35,6 +35,10 @@
         padding: 20px;
         margin-bottom: 20px;
         transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        color: inherit;
     }
 
     body.light-theme .post-card {
@@ -131,48 +135,20 @@
     <p>Deel je gaming ervaringen en praat met andere gamers</p>
 </div>
 
-<div class="post-card">
+@foreach($posts as $post)
+<a href="{{ route('community.show', $post['id']) }}" class="post-card">
     <div class="post-header">
-        <span class="post-author">👤 GameMaster2024</span>
-        <span class="post-date">2 uur geleden</span>
+        <span class="post-author">👤 {{ $post['author'] }}</span>
+        <span class="post-date">{{ $post['created_at'] }}</span>
     </div>
     <div class="post-content">
-        <h3>Welkom in de GamePortal Community!</h3>
-        <p>Hé gamers! Dit is de plek om je favoriete games te bespreken, tips te delen en nieuwe gaming vrienden te maken. Wat speel jij momenteel?</p>
+        <h3>{{ $post['title'] }}</h3>
+        <p>{{ $post['content'] }}</p>
     </div>
     <div class="post-footer">
-        <span class="post-action">👍 24 Likes</span>
-        <span class="post-action">💬 12 Reacties</span>
+        <span class="post-action">👍 {{ $post['likes'] }} Likes</span>
+        <span class="post-action">💬 {{ $post['comments_count'] }} Reacties</span>
     </div>
-</div>
-
-<div class="post-card">
-    <div class="post-header">
-        <span class="post-author">👤 ProGamer99</span>
-        <span class="post-date">5 uur geleden</span>
-    </div>
-    <div class="post-content">
-        <h3>Beste multiplayer games van 2024?</h3>
-        <p>Ik ben op zoek naar nieuwe multiplayer games om met vrienden te spelen. Wat zijn jullie aanbevelingen?</p>
-    </div>
-    <div class="post-footer">
-        <span class="post-action">👍 18 Likes</span>
-        <span class="post-action">💬 32 Reacties</span>
-    </div>
-</div>
-
-<div class="post-card">
-    <div class="post-header">
-        <span class="post-author">👤 CasualGamer</span>
-        <span class="post-date">1 dag geleden</span>
-    </div>
-    <div class="post-content">
-        <h3>Gaming setup tips</h3>
-        <p>Zojuist mijn gaming setup ge-upgrade! Deel hier je setup en laten we elkaar inspireren 🎮✨</p>
-    </div>
-    <div class="post-footer">
-        <span class="post-action">👍 45 Likes</span>
-        <span class="post-action">💬 28 Reacties</span>
-    </div>
-</div>
+</a>
+@endforeach
 @endsection
