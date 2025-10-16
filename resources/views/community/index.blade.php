@@ -130,10 +130,57 @@
     }
 </style>
 
+<style>
+    .btn-create {
+        background-color: #000000;
+        color: #ffffff !important;
+        border: 2px solid #000000;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 2rem;
+    }
+
+    .btn-create:hover {
+        background-color: #ffffff;
+        color: #000000 !important;
+        border-color: #000000;
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+
+    .alert-success {
+        background-color: #10b981;
+        color: #ffffff;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+    }
+
+    body.light-theme .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+</style>
+
 <div class="community-header">
     <h1>💬 Community</h1>
     <p>Deel je gaming ervaringen en praat met andere gamers</p>
 </div>
+
+@if(session('success'))
+    <div class="alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@auth
+    <a href="{{ route('community.create') }}" class="btn-create">✍️ Nieuwe Post</a>
+@endauth
 
 @foreach($posts as $post)
 <a href="{{ route('community.show', $post['id']) }}" class="post-card">

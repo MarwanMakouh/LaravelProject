@@ -398,21 +398,71 @@
     @endif
 
     <hr>
-    <h4>💬 Reacties</h4>
+    <h4>💬 Reacties ({{ count($comments) }})</h4>
 
-    <form class="comment-form">
-        <textarea class="form-control" rows="4" placeholder="Typ je bericht..." required></textarea>
-        <button type="submit" class="btn btn-primary">Plaats reactie</button>
-    </form>
-
-    <div class="mt-4">
-        <div class="card mb-2">
-            <div class="card-body">
-                <strong>Gebruiker123</strong>
-                <p>Fantastische game! 😍</p>
-                <small class="text-muted">2 uur geleden</small>
-            </div>
+    @if(session('success'))
+        <div style="background-color: #10b981; color: #ffffff; padding: 1rem; border-radius: 5px; margin-bottom: 1rem;">
+            {{ session('success') }}
         </div>
-    </div>
+    @endif
+
+    <!-- Comment Form -->
+    @auth
+        <form action="{{ route('games.comment.store', $game['slug']) }}" method="POST" style="margin-bottom: 2rem;">
+            @csrf
+            <input type="hidden" name="game_name" value="{{ $game['name'] }}">
+            <div style="margin-bottom: 1rem;">
+                <label style="color: #ffffff; font-weight: 600; margin-bottom: 0.5rem; display: block;">
+                    Reageren als: <strong>{{ Auth::user()->name }}</strong>
+                </label>
+            </div>
+            <div class="comment-form">
+                <textarea name="content" class="form-control" rows="4" placeholder="Typ je reactie..." required maxlength="1000">{{ old('content') }}</textarea>
+                <button type="submit" class="btn btn-primary">Plaats reactie</button>
+            </div>
+            @error('content')
+                <small style="color: #ef4444; display: block; margin-top: 0.5rem;">{{ $message }}</small>
+            @enderror
+        </form>
+    @else
+        <form action="{{ route('games.comment.store', $game['slug']) }}" method="POST" style="margin-bottom: 2rem;">
+            @csrf
+            <input type="hidden" name="game_name" value="{{ $game['name'] }}">
+            <div style="margin-bottom: 1rem;">
+                <label for="author" style="color: #ffffff; font-weight: 600; margin-bottom: 0.5rem; display: block;">Naam</label>
+                <input type="text" id="author" name="author" class="form-control" placeholder="Je naam..." required maxlength="255" value="{{ old('author') }}" style="max-width: 800px; margin-bottom: 1rem;">
+                @error('author')
+                    <small style="color: #ef4444; display: block; margin-top: 0.25rem;">{{ $message }}</small>
+                @enderror
+            </div>
+            <div class="comment-form">
+                <textarea name="content" class="form-control" rows="4" placeholder="Typ je reactie..." required maxlength="1000">{{ old('content') }}</textarea>
+                <button type="submit" class="btn btn-primary">Plaats reactie</button>
+            </div>
+            @error('content')
+                <small style="color: #ef4444; display: block; margin-top: 0.5rem;">{{ $message }}</small>
+            @enderror
+        </form>
+        <p style="color: #999; margin-top: 1rem; font-size: 0.9rem; margin-bottom: 2rem;">
+            💡 Tip: <a href="{{ route('login') }}" style="color: #6366f1;">Log in</a> om automatisch je accountnaam te gebruiken!
+        </p>
+    @endauth
+
+    <!-- Comments List -->
+    @if(count($comments) > 0)
+        @foreach($comments as $comment)
+            <div class="card mb-2">
+                <div class="card-body">
+                    <strong>👤 {{ $comment['author'] }}</strong>
+                    <p>{{ $comment['content'] }}</p>
+                    <small class="text-muted">{{ $comment['created_at'] }}</small>
+                </div>
+            </div>
+        @endforeach
+    @else
+        <div style="text-align: center; color: #999; padding: 2rem; font-style: italic;">
+            Nog geen reacties. Wees de eerste om te reageren!
+        </div>
+    @endif
 </div>
 @endsection
