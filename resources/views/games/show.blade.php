@@ -4,9 +4,139 @@
 @section('content')
 <style>
     /* Game detail page styling */
-    .game-detail-container h2 {
-        color: #ffffff;
+    .game-detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .game-header {
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+    }
+
+    .game-banner {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 10px;
         margin-bottom: 1.5rem;
+    }
+
+    .game-title {
+        color: #ffffff;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    body.light-theme .game-title {
+        color: #000000;
+    }
+
+    /* Info Grid */
+    .game-info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-card {
+        background-color: #2a2a2a;
+        border: 1px solid #444;
+        border-radius: 10px;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .info-card h3 {
+        color: #ffffff;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .big-text {
+        color: #6366f1;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0.5rem 0;
+    }
+
+    .info-card small {
+        color: #999;
+        font-size: 0.85rem;
+    }
+
+    body.light-theme .info-card {
+        background-color: #f9f9f9;
+        border-color: #ddd;
+    }
+
+    body.light-theme .info-card h3 {
+        color: #000000;
+    }
+
+    body.light-theme .info-card small {
+        color: #666;
+    }
+
+    /* Game Sections */
+    .game-section {
+        margin-bottom: 2rem;
+    }
+
+    .game-section h3 {
+        color: #ffffff;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .game-section p {
+        color: #cccccc;
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
+
+    .game-description {
+        white-space: pre-line;
+    }
+
+    body.light-theme .game-section h3 {
+        color: #000000;
+    }
+
+    body.light-theme .game-section p {
+        color: #333333;
+    }
+
+    /* Tags */
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .tag {
+        background-color: #333333;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        border: 1px solid #444;
+    }
+
+    body.light-theme .tag {
+        background-color: #e5e5e5;
+        color: #000000;
+        border-color: #ccc;
+    }
+
+    /* Info Row */
+    .game-info-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-bottom: 2rem;
     }
 
     .game-detail-container h4 {
@@ -15,28 +145,38 @@
         margin-bottom: 1rem;
     }
 
-    .game-detail-container p {
-        color: #cccccc;
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-
     .game-detail-container hr {
         border-color: #444;
         margin: 2rem 0;
     }
 
-    body.light-theme .game-detail-container h2,
     body.light-theme .game-detail-container h4 {
         color: #000000;
     }
 
-    body.light-theme .game-detail-container p {
-        color: #333333;
-    }
-
     body.light-theme .game-detail-container hr {
         border-color: #ddd;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .game-info-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .game-info-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .game-title {
+            font-size: 2rem;
+        }
+
+        .game-info-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
     /* Form styling */
@@ -45,6 +185,7 @@
         gap: 1rem;
         align-items: flex-start;
         max-width: 800px;
+        margin-bottom: 2rem;
     }
 
     .form-control {
@@ -172,9 +313,89 @@
 </style>
 
 <div class="game-detail-container">
-    <h2 class="mb-4">🎮 Game: {{ ucfirst(str_replace('-', ' ', request()->slug)) }}</h2>
+    <!-- Game Header -->
+    <div class="game-header">
+        <img src="{{ $game['background_image'] }}" alt="{{ $game['name'] }}" class="game-banner">
+        <h1 class="game-title">{{ $game['name'] }}</h1>
+    </div>
 
-    <p>Hier kun je informatie tonen over de geselecteerde game.</p>
+    <!-- Game Info Grid -->
+    <div class="game-info-grid">
+        <div class="info-card">
+            <h3>⭐ Rating</h3>
+            <p class="big-text">{{ $game['rating'] }}/5</p>
+            <small>{{ number_format($game['rating_count']) }} reviews</small>
+        </div>
+
+        <div class="info-card">
+            <h3>📅 Release Datum</h3>
+            <p class="big-text">{{ $game['released'] }}</p>
+        </div>
+
+        <div class="info-card">
+            <h3>🏆 Metacritic</h3>
+            <p class="big-text">{{ $game['metacritic'] }}</p>
+        </div>
+
+        <div class="info-card">
+            <h3>⏱️ Speeltijd</h3>
+            <p class="big-text">{{ $game['playtime'] }} uur</p>
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="game-section">
+        <h3>📖 Beschrijving</h3>
+        <p class="game-description">{{ $game['description'] }}</p>
+    </div>
+
+    <!-- Genres -->
+    @if(!empty($game['genres']))
+    <div class="game-section">
+        <h3>🎮 Genres</h3>
+        <div class="tags">
+            @foreach($game['genres'] as $genre)
+                <span class="tag">{{ $genre }}</span>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    <!-- Platforms -->
+    @if(!empty($game['platforms']))
+    <div class="game-section">
+        <h3>💻 Platforms</h3>
+        <div class="tags">
+            @foreach($game['platforms'] as $platform)
+                <span class="tag">{{ $platform }}</span>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    <!-- Developers & Publishers -->
+    <div class="game-info-row">
+        @if(!empty($game['developers']))
+        <div class="game-section">
+            <h3>👨‍💻 Ontwikkelaars</h3>
+            <p>{{ implode(', ', $game['developers']) }}</p>
+        </div>
+        @endif
+
+        @if(!empty($game['publishers']))
+        <div class="game-section">
+            <h3>🏢 Uitgevers</h3>
+            <p>{{ implode(', ', $game['publishers']) }}</p>
+        </div>
+        @endif
+    </div>
+
+    <!-- Website Link -->
+    @if($game['website'])
+    <div class="game-section">
+        <a href="{{ $game['website'] }}" target="_blank" class="btn btn-primary">🌐 Bezoek Website</a>
+    </div>
+    @endif
 
     <hr>
     <h4>💬 Reacties</h4>
