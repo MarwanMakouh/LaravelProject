@@ -215,6 +215,92 @@
     body.light-theme .no-comments {
         color: #666;
     }
+
+    /* Comment form styling */
+    .comment-form {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    body.light-theme .comment-form {
+        background: #ffffff;
+        border: 1px solid #ddd;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        color: #ffffff;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    body.light-theme .form-label {
+        color: #000000;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #444;
+        border-radius: 5px;
+        background-color: #2a2a2a;
+        color: #ffffff;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #6366f1;
+        background-color: #333333;
+    }
+
+    body.light-theme .form-control {
+        background-color: #ffffff;
+        border-color: #ddd;
+        color: #000000;
+    }
+
+    body.light-theme .form-control:focus {
+        border-color: #000000;
+    }
+
+    .btn-primary {
+        background-color: #000000;
+        color: #ffffff !important;
+        border: 2px solid #000000;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #ffffff;
+        color: #000000 !important;
+        border-color: #000000;
+    }
+
+    .alert-success {
+        background-color: #10b981;
+        color: #ffffff;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+    }
+
+    body.light-theme .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
 </style>
 
 <a href="{{ route('community.index') }}" class="back-button">← Terug naar Community</a>
@@ -240,6 +326,56 @@
 
 <div class="comments-section">
     <h2 class="comments-header">💬 Reacties ({{ count($post['comments']) }})</h2>
+
+    @if(session('success'))
+        <div class="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- Comment Form -->
+    @auth
+        <form action="{{ route('community.comment.store', $post['id']) }}" method="POST" class="comment-form">
+            @csrf
+            <div class="form-group">
+                <label class="form-label">Reageren als: <strong>{{ Auth::user()->name }}</strong></label>
+            </div>
+
+            <div class="form-group">
+                <label for="content" class="form-label">Reactie</label>
+                <textarea id="content" name="content" class="form-control" rows="4" placeholder="Typ je reactie..." required maxlength="1000">{{ old('content') }}</textarea>
+                @error('content')
+                    <small style="color: #ef4444;">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn-primary">Plaats reactie</button>
+        </form>
+    @else
+        <form action="{{ route('community.comment.store', $post['id']) }}" method="POST" class="comment-form">
+            @csrf
+            <div class="form-group">
+                <label for="author" class="form-label">Naam</label>
+                <input type="text" id="author" name="author" class="form-control" placeholder="Je naam..." required maxlength="255" value="{{ old('author') }}">
+                @error('author')
+                    <small style="color: #ef4444;">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="content" class="form-label">Reactie</label>
+                <textarea id="content" name="content" class="form-control" rows="4" placeholder="Typ je reactie..." required maxlength="1000">{{ old('content') }}</textarea>
+                @error('content')
+                    <small style="color: #ef4444;">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn-primary">Plaats reactie</button>
+        </form>
+        <p style="color: #999; margin-top: 1rem; font-size: 0.9rem;">
+            💡 Tip: <a href="{{ route('login') }}" style="color: #6366f1;">Log in</a> om automatisch je accountnaam te gebruiken!
+        </p>
+    @endauth
 
     @if(count($post['comments']) > 0)
         @foreach($post['comments'] as $comment)

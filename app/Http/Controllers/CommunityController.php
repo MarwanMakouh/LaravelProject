@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class CommunityController extends Controller
@@ -72,6 +73,61 @@ class CommunityController extends Controller
             abort(404, 'Post niet gevonden');
         }
 
+        // Haal echte comments uit de database
+        $dbComments = Comment::where('post_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($comment) {
+                return [
+                    'author' => $comment->author,
+                    'content' => $comment->content,
+                    'created_at' => $comment->created_at->diffForHumans(),
+                ];
+            })
+            ->toArray();
+
+        // Combineer mock comments met database comments
+        $post['comments'] = array_merge($dbComments, $post['comments']);
+        $post['comments_count'] = count($post['comments']);
+
         return view('community.show', compact('post'));
+    }
+
+    public function storeComment(Request $request, $id)
+    {
+        // Als gebruiker ingelogd is, gebruik hun naam
+        if (auth()->check()) {
+            $validated = $request->validate([
+                'content' => ['required', 'string', 'max:1000'],
+            ], [
+                'content.required' => 'Reactie is verplicht.',
+                'content.max' => 'Reactie mag maximaal 1000 tekens zijn.',
+            ]);
+
+            Comment::create([
+                'post_id' => $id,
+                'author' => auth()->user()->name,
+                'content' => $validated['content'],
+            ]);
+        } else {
+            // Voor niet-ingelogde gebruikers, vraag om naam
+            $validated = $request->validate([
+                'author' => ['required', 'string', 'max:255'],
+                'content' => ['required', 'string', 'max:1000'],
+            ], [
+                'author.required' => 'Naam is verplicht.',
+                'content.required' => 'Reactie is verplicht.',
+                'content.max' => 'Reactie mag maximaal 1000 tekens zijn.',
+            ]);
+
+            Comment::create([
+                'post_id' => $id,
+                'author' => $validated['author'],
+                'content' => $validated['content'],
+            ]);
+        }
+
+        return redirect()->route('community.show', $id)
+            ->with('success', 'Reactie succesvol geplaatst!');
     }
 }
