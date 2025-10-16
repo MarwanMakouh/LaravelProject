@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\GamesController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -13,8 +14,8 @@ Route::get('/community/{id}', [CommunityController::class, 'show'])->name('commu
 Route::view('/faq', 'faq.index')->name('faq.index');
 Route::view('/contact', 'contact.form')->name('contact.form');
 
-// 🎮 Game detail (statische mock)
-Route::view('/games/{slug}', 'games.show')->name('games.show');
+// 🎮 Game detail (met API data)
+Route::get('/games/{slug}', [GamesController::class, 'show'])->name('games.show');
 
 // 🔐 Authenticatie routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
