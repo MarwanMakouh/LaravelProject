@@ -21,86 +21,11 @@
             margin-bottom: 1rem;
         }
 
-        /* Header with search */
+        /* Header styling */
         .header-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 2rem;
-            gap: 3rem;
-            flex-wrap: wrap;
-            padding: 0 1rem;
-        }
-
-        .header-text {
-            flex: 1;
-            min-width: 300px;
             text-align: center;
-        }
-
-        /* Search bar styling */
-        .search-container {
-            flex: 1;
-            max-width: 500px;
-        }
-
-        .search-form {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 0.75rem 1.25rem;
-            border: 2px solid #444;
-            border-radius: 8px;
-            background-color: #2a2a2a;
-            color: #ffffff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #6c63ff;
-            background-color: #333333;
-        }
-
-        .search-input::placeholder {
-            color: #888;
-        }
-
-        .search-btn {
-            padding: 0.75rem 2rem;
-            background-color: #000000;
-            color: #ffffff;
-            border: 2px solid #000000;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .search-btn:hover {
-            background-color: #ffffff;
-            color: #000000;
-            border-color: #000000;
-            transform: translateY(-2px);
-        }
-
-        .clear-btn {
-            padding: 0.75rem 1.5rem;
-            background-color: #444;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .clear-btn:hover {
-            background-color: #555;
+            margin-bottom: 3rem;
+            padding: 2rem 1rem;
         }
 
         /* Loading spinner */
@@ -132,17 +57,16 @@
 
         /* Game cards grid */
         .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin: 0;
-            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 0 auto;
+            padding: 0 4rem;
+            max-width: 1400px;
         }
 
         .col-md-4 {
-            flex: 1;
-            min-width: 280px;
-            max-width: calc(25% - 1.5rem);
+            width: 100%;
         }
 
         /* Game card styling */
@@ -234,51 +158,51 @@
         }
 
         /* Responsive aanpassingen */
-        @media (max-width: 1400px) {
-            .col-md-4 {
-                max-width: calc(33.333% - 1.5rem);
+        @media (max-width: 1200px) {
+            .row {
+                padding: 0 3rem;
+                gap: 1.5rem;
             }
         }
 
         @media (max-width: 992px) {
-            .col-md-4 {
-                max-width: calc(50% - 1.5rem);
+            .row {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 0 2rem;
+                gap: 1.5rem;
             }
         }
 
         @media (max-width: 768px) {
-            .col-md-4 {
-                max-width: 100%;
+            .row {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+                gap: 1.5rem;
             }
 
             h1 {
                 font-size: 2rem;
             }
+
+            .header-container {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .row {
+                padding: 0 0.5rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
         }
     </style>
 
     <div class="header-container">
-        <div class="header-text">
-            <h1 class="mb-2">🎮 Welkom bij GamePortal</h1>
-            <p class="text-muted">Ontdek de nieuwste games, nieuws en community-reacties!</p>
-        </div>
-
-        <!-- Search Bar -->
-        <div class="search-container">
-            <form action="{{ route('home') }}" method="GET" class="search-form">
-                <input
-                    type="text"
-                    name="search"
-                    class="search-input"
-                    placeholder="Zoek naar games..."
-                    value="{{ $search ?? '' }}"
-                >
-                <button type="submit" class="search-btn">Zoeken</button>
-                @if($search)
-                    <a href="{{ route('home') }}" class="clear-btn" style="text-decoration: none; display: flex; align-items: center;">Wissen</a>
-                @endif
-            </form>
-        </div>
+        <h1 class="mb-2">🎮 Welkom bij GamePortal</h1>
+        <p class="text-muted">Ontdek de nieuwste games, nieuws en community-reacties!</p>
     </div>
 
     <div class="row mt-4" id="games-container">

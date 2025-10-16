@@ -60,7 +60,7 @@ class CommunityController extends Controller
     public function index()
     {
         $posts = $this->getPosts();
-        return view('news.index', compact('posts'));
+        return view('community.index', compact('posts'));
     }
 
     public function show($id)
@@ -72,6 +72,6 @@ class CommunityController extends Controller
             abort(404, 'Post niet gevonden');
         }
 
-        return view('news.show', compact('post'));
+        return view('community.show', compact('post'));
     }
 }
