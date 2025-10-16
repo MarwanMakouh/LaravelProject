@@ -28,17 +28,45 @@
         color: #666666;
     }
 
+    /* Pinterest-style masonry grid */
+    .masonry-grid {
+        column-count: 3;
+        column-gap: 50px;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    @media (max-width: 1200px) {
+        .masonry-grid {
+            column-count: 2;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .masonry-grid {
+            column-count: 1;
+            padding: 0 1rem;
+        }
+    }
+
     .post-card {
         background: #2a2a2a;
         border: 1px solid #444;
         border-radius: 10px;
         padding: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
         transition: all 0.3s ease;
         cursor: pointer;
         text-decoration: none;
-        display: block;
+        display: inline-block;
+        width: 100%;
         color: inherit;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-column-break-inside: avoid;
+        overflow: hidden;
+        box-sizing: border-box;
     }
 
     body.light-theme .post-card {
@@ -48,9 +76,9 @@
     }
 
     .post-card:hover {
-        transform: translateY(-10px);
         border-color: #ffffff;
         box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        transform: scale(1.02);
     }
 
     body.light-theme .post-card:hover {
@@ -141,8 +169,9 @@
         cursor: pointer;
         transition: all 0.3s ease;
         text-decoration: none;
-        display: inline-block;
-        margin-bottom: 2rem;
+        display: block;
+        margin: 0 auto 2rem auto;
+        width: fit-content;
     }
 
     .btn-create:hover {
@@ -182,20 +211,22 @@
     <a href="{{ route('community.create') }}" class="btn-create">✍️ Nieuwe Post</a>
 @endauth
 
-@foreach($posts as $post)
-<a href="{{ route('community.show', $post['id']) }}" class="post-card">
-    <div class="post-header">
-        <span class="post-author">👤 {{ $post['author'] }}</span>
-        <span class="post-date">{{ $post['created_at'] }}</span>
-    </div>
-    <div class="post-content">
-        <h3>{{ $post['title'] }}</h3>
-        <p>{{ $post['content'] }}</p>
-    </div>
-    <div class="post-footer">
-        <span class="post-action">👍 {{ $post['likes'] }} Likes</span>
-        <span class="post-action">💬 {{ $post['comments_count'] }} Reacties</span>
-    </div>
-</a>
-@endforeach
+<div class="masonry-grid">
+    @foreach($posts as $post)
+    <a href="{{ route('community.show', $post['id']) }}" class="post-card">
+        <div class="post-header">
+            <span class="post-author">👤 {{ $post['author'] }}</span>
+            <span class="post-date">{{ $post['created_at'] }}</span>
+        </div>
+        <div class="post-content">
+            <h3>{{ $post['title'] }}</h3>
+            <p>{{ $post['content'] }}</p>
+        </div>
+        <div class="post-footer">
+            <span class="post-action">👍 {{ $post['likes'] }} Likes</span>
+            <span class="post-action">💬 {{ $post['comments_count'] }} Reacties</span>
+        </div>
+    </a>
+    @endforeach
+</div>
 @endsection
