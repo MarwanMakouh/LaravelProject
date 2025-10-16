@@ -145,16 +145,26 @@
             font-weight: 600;
             transition: all 0.3s ease;
             text-decoration: none;
-            color: #ffffff;
+            color: #ffffff !important;
             display: inline-block;
         }
 
         .btn-primary:hover {
             background-color: #ffffff;
-            color: #000000;
+            color: #000000 !important;
             border-color: #000000;
             transform: scale(1.05);
             text-decoration: none;
+        }
+
+        body.light-theme .btn-primary {
+            background-color: #000000;
+            color: #ffffff !important;
+        }
+
+        body.light-theme .btn-primary:hover {
+            background-color: #ffffff;
+            color: #000000 !important;
         }
 
         /* Responsive aanpassingen */

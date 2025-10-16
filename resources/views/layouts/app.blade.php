@@ -81,6 +81,15 @@
             color: #333333 !important;
         }
 
+        /* Dark mode button styling */
+        .btn-primary {
+            color: #ffffff !important;
+        }
+
+        .btn-primary:hover {
+            color: #000000 !important;
+        }
+
         body.light-theme .btn-primary {
             background-color: #000000 !important;
             color: #ffffff !important;
