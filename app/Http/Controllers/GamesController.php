@@ -40,6 +40,9 @@ class GamesController extends Controller
             abort(404, 'Game niet gevonden');
         }
 
+        // Voeg slug toe aan game array
+        $game['slug'] = $slug;
+
         // Zoek of maak Game record in database voor comments
         $gameModel = Game::firstOrCreate(
             ['rawg_id' => $gameId],

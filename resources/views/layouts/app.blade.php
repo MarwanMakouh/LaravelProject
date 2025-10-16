@@ -9,6 +9,11 @@
             font-family: Arial, sans-serif;
         }
 
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
         /* Main container styling */
         .container {
             max-width: 100%;

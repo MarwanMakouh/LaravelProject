@@ -82,11 +82,12 @@ class CommunityController extends Controller
         }
 
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255', 'unique:communities,title'],
             'content' => ['required', 'string', 'max:5000'],
         ], [
             'title.required' => 'Titel is verplicht.',
             'title.max' => 'Titel mag maximaal 255 tekens zijn.',
+            'title.unique' => 'Er bestaat al een community post met deze titel.',
             'content.required' => 'Inhoud is verplicht.',
             'content.max' => 'Inhoud mag maximaal 5000 tekens zijn.',
         ]);
