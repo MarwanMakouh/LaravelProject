@@ -16,8 +16,16 @@ class GamesController extends Controller
 
     public function show($slug)
     {
-        // Zoek de game ID op basis van de slug
-        $gameId = $this->rawgApi->searchGameBySlug($slug);
+        // Probeer eerst de ID uit de slug te halen (format: "123-game-name")
+        $gameId = null;
+
+        if (preg_match('/^(\d+)-/', $slug, $matches)) {
+            // ID gevonden in de slug
+            $gameId = $matches[1];
+        } else {
+            // Geen ID in slug, probeer te zoeken op basis van naam
+            $gameId = $this->rawgApi->searchGameBySlug($slug);
+        }
 
         if (!$gameId) {
             abort(404, 'Game niet gevonden');

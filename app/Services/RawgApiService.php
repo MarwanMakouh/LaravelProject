@@ -117,16 +117,29 @@ class RawgApiService
     {
         $searchTerm = str_replace('-', ' ', $slug);
 
+        // Probeer eerst met exacte match
         $response = Http::get("{$this->baseUrl}/games", [
             'key' => $this->apiKey,
             'search' => $searchTerm,
-            'search_exact' => true,
-            'page_size' => 1,
+            'search_exact' => false,
+            'page_size' => 5,
         ]);
 
         if ($response->successful()) {
             $data = $response->json();
             if (!empty($data['results'])) {
+                // Zoek beste match op basis van naam similarity
+                foreach ($data['results'] as $result) {
+                    $gameName = strtolower($result['name']);
+                    $searchLower = strtolower($searchTerm);
+
+                    // Als de namen exact overeenkomen of de game naam begint met de zoekterm
+                    if ($gameName === $searchLower || str_starts_with($gameName, $searchLower)) {
+                        return $result['id'];
+                    }
+                }
+
+                // Als geen exacte match, return eerste resultaat
                 return $data['results'][0]['id'];
             }
         }

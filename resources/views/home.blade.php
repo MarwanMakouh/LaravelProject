@@ -226,7 +226,7 @@
                         <p class="mb-1">📅 Released: {{ $game['released'] }}</p>
                         <div class="game-info-bottom">
                             <p>⭐ {{ $game['rating'] }}/5</p>
-                            <a href="{{ url('/games/' . Str::slug($game['name'])) }}" class="btn btn-primary">Bekijk meer</a>
+                            <a href="{{ url('/games/' . $game['id'] . '-' . Str::slug($game['name'])) }}" class="btn btn-primary">Bekijk meer</a>
                         </div>
                     </div>
                 </div>
@@ -310,7 +310,7 @@
                             <p class="mb-1">📅 Released: ${game.released}</p>
                             <div class="game-info-bottom">
                                 <p>⭐ ${game.rating}/5</p>
-                                <a href="/games/${slug}" class="btn btn-primary">Bekijk meer</a>
+                                <a href="/games/${game.id}-${slug}" class="btn btn-primary">Bekijk meer</a>
                             </div>
                         </div>
                     </div>
