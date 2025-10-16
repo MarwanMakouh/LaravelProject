@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
+use App\Models\Comment;
 use App\Services\RawgApiService;
 use Illuminate\Http\Request;
 
@@ -38,6 +40,87 @@ class GamesController extends Controller
             abort(404, 'Game niet gevonden');
         }
 
-        return view('games.show', compact('game'));
+        // Zoek of maak Game record in database voor comments
+        $gameModel = Game::firstOrCreate(
+            ['rawg_id' => $gameId],
+            [
+                'name' => $game['name'] ?? 'Unknown',
+                'slug' => $slug,
+            ]
+        );
+
+        // Haal comments uit de database
+        $comments = $gameModel->comments()
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($comment) {
+                return [
+                    'author' => $comment->author,
+                    'content' => $comment->content,
+                    'created_at' => $comment->created_at->diffForHumans(),
+                ];
+            })
+            ->toArray();
+
+        return view('games.show', compact('game', 'gameModel', 'comments'));
+    }
+
+    public function storeComment(Request $request, $slug)
+    {
+        // Haal game ID uit slug
+        $gameId = null;
+
+        if (preg_match('/^(\d+)-/', $slug, $matches)) {
+            $gameId = $matches[1];
+        } else {
+            $gameId = $this->rawgApi->searchGameBySlug($slug);
+        }
+
+        if (!$gameId) {
+            abort(404, 'Game niet gevonden');
+        }
+
+        // Zoek of maak Game record
+        $gameModel = Game::firstOrCreate(
+            ['rawg_id' => $gameId],
+            [
+                'name' => $request->input('game_name', 'Unknown'),
+                'slug' => $slug,
+            ]
+        );
+
+        // Als gebruiker ingelogd is, gebruik hun naam en user_id
+        if (auth()->check()) {
+            $validated = $request->validate([
+                'content' => ['required', 'string', 'max:1000'],
+            ], [
+                'content.required' => 'Reactie is verplicht.',
+                'content.max' => 'Reactie mag maximaal 1000 tekens zijn.',
+            ]);
+
+            $gameModel->comments()->create([
+                'user_id' => auth()->id(),
+                'author' => auth()->user()->name,
+                'content' => $validated['content'],
+            ]);
+        } else {
+            // Voor niet-ingelogde gebruikers, vraag om naam
+            $validated = $request->validate([
+                'author' => ['required', 'string', 'max:255'],
+                'content' => ['required', 'string', 'max:1000'],
+            ], [
+                'author.required' => 'Naam is verplicht.',
+                'content.required' => 'Reactie is verplicht.',
+                'content.max' => 'Reactie mag maximaal 1000 tekens zijn.',
+            ]);
+
+            $gameModel->comments()->create([
+                'author' => $validated['author'],
+                'content' => $validated['content'],
+            ]);
+        }
+
+        return redirect()->route('games.show', $slug)
+            ->with('success', 'Reactie succesvol geplaatst!');
     }
 }
