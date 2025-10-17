@@ -1,10 +1,4 @@
 <style>
-    /* Navbar wrapper met witte ruimte */
-    body {
-        margin: 0;
-        padding: 0;
-    }
-
     /* Navbar styling met zwarte achtergrond */
     .navbar {
         background-color: #000000 !important;
@@ -15,6 +9,7 @@
         align-items: center;
         box-sizing: border-box;
         overflow-x: hidden;
+        flex-shrink: 0;
     }
 
     .navbar .container-fluid {
