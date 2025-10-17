@@ -217,10 +217,14 @@
 
     <div class="row mt-4" id="games-container">
         @if(count($games) > 0)
-            @foreach($games as $game)
+            @foreach($games as $index => $game)
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="{{ $game['background_image'] }}" class="card-img-top" alt="{{ $game['name'] }}">
+                    <img src="{{ $game['background_image'] }}"
+                         class="card-img-top"
+                         alt="{{ $game['name'] }}"
+                         loading="{{ $index < 6 ? 'eager' : 'lazy' }}"
+                         decoding="async">
                     <div class="card-info-section">
                         <h5 class="card-title">{{ $game['name'] }}</h5>
                         <p class="mb-1">📅 Released: {{ $game['released'] }}</p>
@@ -251,18 +255,33 @@
         let hasMore = {{ $hasMore ? 'true' : 'false' }};
         const searchQuery = "{{ $search ?? '' }}";
 
-        // Infinite scroll functionaliteit
-        window.addEventListener('scroll', function() {
+        // Throttle functie om scroll events te verminderen
+        function throttle(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Infinite scroll functionaliteit met throttling
+        const handleScroll = throttle(function() {
             if (isLoading || !hasMore) return;
 
             const scrollPosition = window.innerHeight + window.scrollY;
             const documentHeight = document.documentElement.scrollHeight;
 
-            // Laad meer games als we 200px van de onderkant zijn
-            if (scrollPosition >= documentHeight - 200) {
+            // Laad meer games als we 300px van de onderkant zijn
+            if (scrollPosition >= documentHeight - 300) {
                 loadMoreGames();
             }
-        });
+        }, 200);
+
+        window.addEventListener('scroll', handleScroll);
 
         function loadMoreGames() {
             if (isLoading || !hasMore) return;
@@ -279,14 +298,19 @@
             }
 
             fetch(url)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
                 .then(data => {
                     const container = document.getElementById('games-container');
 
-                    data.games.forEach(game => {
-                        const gameCard = createGameCard(game);
-                        container.insertAdjacentHTML('beforeend', gameCard);
-                    });
+                    if (data.games && data.games.length > 0) {
+                        data.games.forEach(game => {
+                            const gameCard = createGameCard(game);
+                            container.insertAdjacentHTML('beforeend', gameCard);
+                        });
+                    }
 
                     hasMore = data.hasMore;
                     isLoading = false;
@@ -304,7 +328,11 @@
             return `
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
-                        <img src="${game.background_image}" class="card-img-top" alt="${game.name}">
+                        <img src="${game.background_image}"
+                             class="card-img-top"
+                             alt="${game.name}"
+                             loading="lazy"
+                             decoding="async">
                         <div class="card-info-section">
                             <h5 class="card-title">${game.name}</h5>
                             <p class="mb-1">📅 Released: ${game.released}</p>

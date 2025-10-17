@@ -431,10 +431,11 @@
             </ul>
 
             @if(request()->is('/'))
-            <form action="{{ route('home') }}" method="GET" class="navbar-search">
+            <form action="{{ route('home') }}" method="GET" class="navbar-search" id="search-form">
                 <input
                     type="text"
                     name="search"
+                    id="search-input"
                     class="navbar-search-input"
                     placeholder="Zoek games..."
                     value="{{ request('search') }}"
@@ -491,4 +492,36 @@
             }
         });
     });
+
+    // Debounce functie voor zoeken - wacht 500ms na laatste keystroke
+    let searchTimeout;
+    const searchInput = document.getElementById('search-input');
+    const searchForm = document.getElementById('search-form');
+
+    if (searchInput && searchForm) {
+        searchInput.addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            const searchValue = e.target.value.trim();
+
+            // Als het veld leeg is, submit niet automatisch
+            if (searchValue.length === 0) {
+                return;
+            }
+
+            // Wacht 500ms voordat we zoeken
+            searchTimeout = setTimeout(function() {
+                if (searchValue.length >= 2) {
+                    searchForm.submit();
+                }
+            }, 500);
+        });
+
+        // Voorkom dat de form te snel wordt gesubmit bij Enter
+        searchForm.addEventListener('submit', function(e) {
+            const searchValue = searchInput.value.trim();
+            if (searchValue.length > 0 && searchValue.length < 2) {
+                e.preventDefault();
+            }
+        });
+    }
 </script>

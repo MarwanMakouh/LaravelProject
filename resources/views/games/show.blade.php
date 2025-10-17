@@ -314,12 +314,39 @@
         color: #000000 !important;
         border-color: #000000;
     }
+
+    /* Loading skeleton for initial render */
+    .skeleton {
+        animation: skeleton-loading 1s linear infinite alternate;
+    }
+
+    @keyframes skeleton-loading {
+        0% {
+            background-color: hsl(200, 20%, 80%);
+        }
+        100% {
+            background-color: hsl(200, 20%, 95%);
+        }
+    }
+
+    /* Optimize rendering with CSS containment */
+    .game-detail-container {
+        contain: layout style paint;
+    }
+
+    .card {
+        contain: layout style paint;
+    }
 </style>
 
 <div class="game-detail-container">
     <!-- Game Header -->
     <div class="game-header">
-        <img src="{{ $game['background_image'] }}" alt="{{ $game['name'] }}" class="game-banner">
+        <img src="{{ $game['background_image'] }}"
+             alt="{{ $game['name'] }}"
+             class="game-banner"
+             loading="eager"
+             fetchpriority="high">
         <h1 class="game-title">{{ $game['name'] }}</h1>
     </div>
 

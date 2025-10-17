@@ -42,36 +42,42 @@ class RawgApiService
      */
     public function getGames($page = 1, $pageSize = 9, $search = null)
     {
-        $params = [
-            'key' => $this->apiKey,
-            'page' => $page,
-            'page_size' => $pageSize,
-            'ordering' => '-rating',
-        ];
+        // Cache key gebaseerd op parameters
+        $cacheKey = 'rawg_games_' . md5($page . '_' . $pageSize . '_' . ($search ?? 'default'));
 
-        if ($search) {
-            $params['search'] = $search;
-            $params['search_exact'] = false;
-        } else {
-            $params['metacritic'] = '80,100';
-        }
-
-        $response = Http::get("{$this->baseUrl}/games", $params);
-
-        if ($response->successful()) {
-            $data = $response->json();
-            return [
-                'games' => $this->formatGames($data['results']),
-                'hasMore' => !empty($data['next']),
-                'total' => $data['count'] ?? 0,
+        // Cache voor 10 minuten (600 seconden) - voor zoekresultaten en pagina's
+        return Cache::remember($cacheKey, 600, function () use ($page, $pageSize, $search) {
+            $params = [
+                'key' => $this->apiKey,
+                'page' => $page,
+                'page_size' => $pageSize,
+                'ordering' => '-rating',
             ];
-        }
 
-        return [
-            'games' => [],
-            'hasMore' => false,
-            'total' => 0,
-        ];
+            if ($search) {
+                $params['search'] = $search;
+                $params['search_exact'] = false;
+            } else {
+                $params['metacritic'] = '80,100';
+            }
+
+            $response = Http::get("{$this->baseUrl}/games", $params);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                return [
+                    'games' => $this->formatGames($data['results']),
+                    'hasMore' => !empty($data['next']),
+                    'total' => $data['count'] ?? 0,
+                ];
+            }
+
+            return [
+                'games' => [],
+                'hasMore' => false,
+                'total' => 0,
+            ];
+        });
     }
 
     /**
