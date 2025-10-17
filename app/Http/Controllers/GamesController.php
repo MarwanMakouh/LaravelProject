@@ -52,9 +52,12 @@ class GamesController extends Controller
             ]
         );
 
-        // Haal comments uit de database
+        // Haal comments uit de database met eager loading van user relatie
+        // Limit tot 50 meest recente comments voor snellere load
         $comments = $gameModel->comments()
+            ->with('user')
             ->orderBy('created_at', 'desc')
+            ->limit(50)
             ->get()
             ->map(function ($comment) {
                 return [
