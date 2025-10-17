@@ -8,6 +8,7 @@
         width: 100%;
         border-top: 1px solid #333333;
         box-sizing: border-box;
+        flex-shrink: 0;
     }
 
     .footer-content {

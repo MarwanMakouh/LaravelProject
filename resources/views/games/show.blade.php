@@ -304,31 +304,6 @@
         text-decoration: none;
     }
 
-    body.light-theme .btn-primary {
-        background-color: #000000;
-        color: #ffffff !important;
-    }
-
-    body.light-theme .btn-primary:hover {
-        background-color: #ffffff;
-        color: #000000 !important;
-        border-color: #000000;
-    }
-
-    /* Loading skeleton for initial render */
-    .skeleton {
-        animation: skeleton-loading 1s linear infinite alternate;
-    }
-
-    @keyframes skeleton-loading {
-        0% {
-            background-color: hsl(200, 20%, 80%);
-        }
-        100% {
-            background-color: hsl(200, 20%, 95%);
-        }
-    }
-
     /* Optimize rendering with CSS containment */
     .game-detail-container {
         contain: layout style paint;

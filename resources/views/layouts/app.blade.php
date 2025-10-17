@@ -12,6 +12,14 @@
         html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #1a1a1a !important;
         }
 
         /* Main container styling */
@@ -19,11 +27,7 @@
             max-width: 100%;
             margin: 0;
             padding: 0;
-        }
-
-        /* Default dark theme background */
-        body {
-            background-color: #1a1a1a !important;
+            flex: 1;
         }
 
         /* Light theme styles */
@@ -64,97 +68,6 @@
             border: 2px solid #000000;
         }
 
-        body.light-theme .card {
-            background-color: #ffffff !important;
-            border: 1px solid #ddd !important;
-        }
-
-        body.light-theme .card:hover {
-            border-color: #000000 !important;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
-        }
-
-        body.light-theme .card-info-section {
-            background-color: #f5f5f5 !important;
-        }
-
-        body.light-theme .card-title {
-            color: #000000 !important;
-        }
-
-        body.light-theme .card-info-section p {
-            color: #333333 !important;
-        }
-
-        /* Dark mode button styling */
-        .btn-primary {
-            color: #ffffff !important;
-        }
-
-        .btn-primary:hover {
-            color: #000000 !important;
-        }
-
-        body.light-theme .btn-primary {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-        }
-
-        body.light-theme .btn-primary:hover {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-        }
-
-        body.light-theme .search-input {
-            background-color: #f5f5f5 !important;
-            border-color: #ddd !important;
-            color: #000000 !important;
-        }
-
-        body.light-theme .search-input:focus {
-            background-color: #ffffff !important;
-            border-color: #000000 !important;
-        }
-
-        body.light-theme .search-input::placeholder {
-            color: #666 !important;
-        }
-
-        body.light-theme .search-btn {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-        }
-
-        body.light-theme .search-btn:hover {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-        }
-
-        body.light-theme .clear-btn {
-            background-color: #ddd !important;
-            color: #000000 !important;
-        }
-
-        body.light-theme .clear-btn:hover {
-            background-color: #ccc !important;
-        }
-
-        body.light-theme .loading-spinner {
-            color: #000000 !important;
-        }
-
-        body.light-theme .spinner {
-            border-color: #ddd !important;
-            border-top-color: #000000 !important;
-        }
-
-        body.light-theme p.text-muted {
-            color: #666 !important;
-        }
-
-        body.light-theme .text-center p {
-            color: #000000 !important;
-        }
     </style>
 </head>
 <body>

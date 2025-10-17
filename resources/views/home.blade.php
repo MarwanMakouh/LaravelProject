@@ -3,11 +3,7 @@
 
 @section('content')
     <style>
-        /* Home page specifieke styling */
-        body {
-            background-color: #1a1a1a !important;
-        }
-
+        /* Header styling */
         h1 {
             color: #ffffff;
             text-align: center;
@@ -21,7 +17,6 @@
             margin-bottom: 1rem;
         }
 
-        /* Header styling */
         .header-container {
             text-align: center;
             margin-bottom: 3rem;
@@ -79,16 +74,6 @@
             height: 100%;
         }
 
-        body.light-theme .card {
-            background-color: #F9FAFB;
-            border: 1px solid #000000;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .card-info-section {
-            background-color: #F3F4F6;
-        }
-
         .card:hover {
             transform: translateY(-10px);
             border-color: #ffffff;
@@ -111,11 +96,19 @@
             padding: 1.5rem;
         }
 
+        body.light-theme .card-info-section {
+            background-color: #F3F4F6;
+        }
+
         .card-title {
             color: #ffffff;
             font-weight: bold;
             font-size: 1.3rem;
             margin-bottom: 1rem;
+        }
+
+        body.light-theme .card-title {
+            color: #000000;
         }
 
         .card-info-section p {
@@ -155,16 +148,6 @@
             border-color: #000000;
             transform: scale(1.05);
             text-decoration: none;
-        }
-
-        body.light-theme .btn-primary {
-            background-color: #000000;
-            color: #ffffff !important;
-        }
-
-        body.light-theme .btn-primary:hover {
-            background-color: #ffffff;
-            color: #000000 !important;
         }
 
         /* Responsive aanpassingen */
