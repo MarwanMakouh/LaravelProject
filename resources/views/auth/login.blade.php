@@ -265,6 +265,10 @@
     </form>
 
     <div class="auth-links">
+        <a href="{{ route('password.request') }}">Wachtwoord vergeten?</a>
+    </div>
+
+    <div class="auth-links">
         Nog geen account? <a href="{{ route('register') }}">Registreer hier</a>
     </div>
     </div>

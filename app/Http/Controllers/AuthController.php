@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -71,9 +72,12 @@ class AuthController extends Controller
             'password' => $validated['password'],
         ]);
 
+        // Trigger email verification
+        event(new Registered($user));
+
         Auth::login($user);
 
-        return redirect('/')->with('success', 'Je account is succesvol aangemaakt!');
+        return redirect()->route('verification.notice')->with('status', 'Je account is aangemaakt! Controleer je email voor verificatie.');
     }
 
     /**
