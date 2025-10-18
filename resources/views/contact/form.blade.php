@@ -162,7 +162,24 @@
     </div>
 
     <div class="contact-form-container">
-    <form>
+        @if(session('success'))
+            <div class="alert-success" style="background-color: #10b981; color: #ffffff; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                ✅ {{ session('success') }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert-error" style="background-color: #ef4444; color: #ffffff; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+    <form method="POST" action="{{ route('contact.send') }}">
+        @csrf
         <div class="form-group">
             <label for="name" class="form-label">Naam *</label>
             <input
@@ -170,6 +187,7 @@
                 class="form-control"
                 id="name"
                 name="name"
+                value="{{ old('name') }}"
                 required
                 placeholder="Jouw naam"
             >
@@ -182,6 +200,7 @@
                 class="form-control"
                 id="email"
                 name="email"
+                value="{{ old('email') }}"
                 required
                 placeholder="naam@voorbeeld.nl"
             >
@@ -194,6 +213,7 @@
                 class="form-control"
                 id="subject"
                 name="subject"
+                value="{{ old('subject') }}"
                 required
                 placeholder="Waar gaat je bericht over?"
             >
@@ -207,7 +227,7 @@
                 name="message"
                 required
                 placeholder="Typ hier je bericht..."
-            ></textarea>
+            >{{ old('message') }}</textarea>
         </div>
 
         <button type="submit" class="btn-submit">Verstuur bericht</button>

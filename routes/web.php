@@ -8,6 +8,7 @@ use App\Http\Controllers\GamesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\ContactController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -18,7 +19,8 @@ Route::post('/community', [CommunityController::class, 'store'])->name('communit
 Route::get('/community/{id}', [CommunityController::class, 'show'])->name('community.show');
 Route::post('/community/{id}/comment', [CommunityController::class, 'storeComment'])->name('community.comment.store');
 Route::view('/faq', 'faq.index')->name('faq.index');
-Route::view('/contact', 'contact.form')->name('contact.form');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.form');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 // 🎮 Game detail (met API data)
 Route::get('/games/{slug}', [GamesController::class, 'show'])->name('games.show');
