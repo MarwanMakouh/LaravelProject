@@ -6,19 +6,21 @@ GamePortal heeft nu email functionaliteit voor:
 - ✅ **Email Verificatie** bij registratie
 - ✅ **Wachtwoord Reset** functionaliteit
 
-## Snelle Start (Development)
+## Snelle Start (Gmail - Huidige Setup)
 
-### Stap 1: Email Provider Kiezen
+### Stap 1: Gmail App Password Aanmaken
 
-Voor **development/testing** raden we **Mailtrap** aan (100% gratis):
+**Je hebt al Gmail geconfigureerd!** Maar voor referentie, zo maak je een App Password:
 
-1. Ga naar [mailtrap.io](https://mailtrap.io) en maak een account
-2. Maak een nieuwe inbox aan
-3. Kopieer de SMTP credentials
+1. Ga naar [Google Account Security](https://myaccount.google.com/security)
+2. Zet **2-Factor Authentication** aan (als nog niet gedaan)
+3. Ga naar **App Passwords** (onder 2-Step Verification)
+4. Selecteer "Mail" en "Other" (Custom name: GamePortal)
+5. Kopieer het 16-cijferige wachtwoord
 
 ### Stap 2: .env Configureren
 
-Open je `.env` bestand en voeg toe:
+✅ **Jouw huidige configuratie** (al ingesteld):
 
 ```env
 MAIL_MAILER=smtp
@@ -33,7 +35,10 @@ MAIL_FROM_NAME="${APP_NAME}"
 APP_URL=http://127.0.0.1:8000
 ```
 
-**BELANGRIJK**: Zorg dat `APP_URL` correct is ingesteld!
+**BELANGRIJK**:
+- ✅ Gmail is geconfigureerd en klaar voor gebruik
+- ⚠️ Gmail heeft een limiet van ~500 emails per dag
+- 🔒 Deel het App Password nooit publiekelijk
 
 ### Stap 3: Cache Wissen
 
@@ -44,30 +49,34 @@ php artisan cache:clear
 
 ### Stap 4: Testen
 
-1. Registreer een nieuw account
-2. Check je Mailtrap inbox voor de verificatie email
-3. Test "Wachtwoord vergeten" functionaliteit
+1. Registreer een nieuw account op http://127.0.0.1:8000/register
+2. Check je **gameportaalproject@gmail.com** inbox voor de verificatie email
+3. Test "Wachtwoord vergeten" functionaliteit op de login pagina
 
-## Productie Opties
+**Tip**: Check ook je SPAM folder als je geen email ontvangt!
 
-### Gmail (Eenvoudig maar beperkt)
+## Alternatieve Opties
 
-⚠️ **Let op**: Gmail heeft een limiet van ~500 emails per dag
+### Mailtrap (Voor Testing/Development)
+
+Als je geen echte emails wilt versturen tijdens development:
+
+⚠️ **Voordeel**: Vangt alle emails op, stuurt ze niet echt
+✅ **Gratis**: 100% gratis voor development
 
 **Setup:**
-1. Zet 2-Factor Authentication aan in je Google Account
-2. Ga naar: Google Account → Security → App Passwords
-3. Genereer een nieuw App Password voor "Mail"
-4. Gebruik dit wachtwoord in je .env:
+1. Registreer op [mailtrap.io](https://mailtrap.io)
+2. Maak een inbox aan
+3. Kopieer credentials naar .env:
 
 ```env
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=your-email@gmail.com
-MAIL_PASSWORD=your-16-digit-app-password
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_mailtrap_username
+MAIL_PASSWORD=your_mailtrap_password
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="your-email@gmail.com"
+MAIL_FROM_ADDRESS="noreply@gameportal.com"
 MAIL_FROM_NAME="GamePortal"
 ```
 
