@@ -62,7 +62,7 @@ class GamesController extends Controller
             ->map(function ($comment) {
                 return [
                     'id' => $comment->id,
-                    'author' => $comment->author,
+                    'author' => $comment->user ? $comment->user->display_name : $comment->author,
                     'user_id' => $comment->user_id,
                     'content' => $comment->content,
                     'created_at' => $comment->created_at->diffForHumans(),
@@ -108,7 +108,7 @@ class GamesController extends Controller
 
             $gameModel->comments()->create([
                 'user_id' => auth()->id(),
-                'author' => auth()->user()->name,
+                'author' => auth()->user()->display_name,
                 'content' => $validated['content'],
             ]);
         } else {

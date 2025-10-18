@@ -230,6 +230,9 @@
 
             <div class="profile-info">
                 <h1 class="profile-name">{{ $user->name }}</h1>
+                @if($user->username)
+                    <p class="profile-email">{{ '@' . $user->username }}</p>
+                @endif
                 <p class="profile-email">{{ $user->email }}</p>
 
                 @auth
@@ -255,6 +258,12 @@
                 <span class="stat-number">{{ $user->created_at->format('Y') }}</span>
                 Lid sinds
             </div>
+            @if($user->birthday)
+                <div class="stat-item">
+                    <span class="stat-number">{{ $user->birthday->format('d-m-Y') }}</span>
+                    Geboortedatum
+                </div>
+            @endif
         </div>
     </div>
 </div>

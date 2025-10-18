@@ -43,12 +43,15 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
+            'username' => 'nullable|string|max:255|unique:users,username,' . $user->id,
+            'birthday' => 'nullable|date|before:today',
             'about_me' => 'nullable|string|max:1000',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $user = Auth::user();
         $profile = $user->profile;
 
         // Maak profiel aan als deze nog niet bestaat
@@ -57,6 +60,11 @@ class ProfileController extends Controller
                 'user_id' => $user->id,
             ]);
         }
+
+        // Update username en birthday op user model
+        $user->username = $request->input('username');
+        $user->birthday = $request->input('birthday');
+        $user->save();
 
         // Update about_me
         $profile->about_me = $request->input('about_me');
