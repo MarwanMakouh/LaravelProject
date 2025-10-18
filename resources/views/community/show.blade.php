@@ -182,10 +182,21 @@
     .comment-author {
         font-weight: bold;
         color: #6366f1;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .comment-author:hover {
+        color: #4f46e5;
+        text-decoration: underline;
     }
 
     body.light-theme .comment-author {
         color: #000000;
+    }
+
+    body.light-theme .comment-author:hover {
+        color: #333333;
     }
 
     .comment-date {
@@ -382,7 +393,11 @@
         @foreach($post['comments'] as $comment)
             <div class="comment-card">
                 <div class="comment-header">
-                    <span class="comment-author">👤 {{ $comment['author'] }}</span>
+                    @if($comment['user_id'])
+                        <a href="{{ route('profile.show', $comment['user_id']) }}" class="comment-author">👤 {{ $comment['author'] }}</a>
+                    @else
+                        <span class="comment-author">👤 {{ $comment['author'] }}</span>
+                    @endif
                     <span class="comment-date">{{ $comment['created_at'] }}</span>
                 </div>
                 <div class="comment-content">

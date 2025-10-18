@@ -256,6 +256,27 @@
         font-size: 1.1rem;
     }
 
+    .card-body a {
+        color: #6366f1;
+        font-size: 1.1rem;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .card-body a:hover {
+        color: #4f46e5;
+        text-decoration: underline;
+    }
+
+    body.light-theme .card-body a {
+        color: #000000;
+    }
+
+    body.light-theme .card-body a:hover {
+        color: #333333;
+    }
+
     .card-body p {
         color: #ffffff;
         margin: 0.5rem 0;
@@ -459,7 +480,11 @@
         @foreach($comments as $comment)
             <div class="card mb-2">
                 <div class="card-body">
-                    <strong>👤 {{ $comment['author'] }}</strong>
+                    @if($comment['user_id'])
+                        <a href="{{ route('profile.show', $comment['user_id']) }}">👤 {{ $comment['author'] }}</a>
+                    @else
+                        <strong>👤 {{ $comment['author'] }}</strong>
+                    @endif
                     <p>{{ $comment['content'] }}</p>
                     <small class="text-muted">{{ $comment['created_at'] }}</small>
                 </div>
