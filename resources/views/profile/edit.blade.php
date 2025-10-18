@@ -296,6 +296,35 @@
                 <p class="help-text">Max 2MB - JPG, PNG, GIF toegestaan</p>
             </div>
 
+            <!-- Username Section -->
+            <div class="form-group">
+                <label for="username" class="form-label">Gebruikersnaam</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-control"
+                    value="{{ old('username', $user->username) }}"
+                    placeholder="Kies een unieke gebruikersnaam"
+                    maxlength="255"
+                >
+                <p class="help-text">Dit is je unieke gebruikersnaam (optioneel)</p>
+            </div>
+
+            <!-- Birthday Section -->
+            <div class="form-group">
+                <label for="birthday" class="form-label">Geboortedatum</label>
+                <input
+                    type="date"
+                    id="birthday"
+                    name="birthday"
+                    class="form-control"
+                    value="{{ old('birthday', $user->birthday ? $user->birthday->format('Y-m-d') : '') }}"
+                    max="{{ date('Y-m-d') }}"
+                >
+                <p class="help-text">Je geboortedatum (optioneel)</p>
+            </div>
+
             <!-- Over Mij Section -->
             <div class="form-group">
                 <label for="about_me" class="form-label">Over Mij</label>
@@ -311,7 +340,7 @@
 
             <!-- Account Info (Read Only) -->
             <div class="form-group">
-                <label class="form-label">Gebruikersnaam</label>
+                <label class="form-label">Naam</label>
                 <input type="text" class="form-control" value="{{ $user->name }}" readonly>
             </div>
 

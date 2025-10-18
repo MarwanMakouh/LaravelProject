@@ -18,7 +18,7 @@ class CommunityController extends Controller
             ->map(function ($community) {
                 return [
                     'id' => $community->id,
-                    'author' => $community->user->name ?? 'Onbekend',
+                    'author' => $community->user ? $community->user->display_name : 'Onbekend',
                     'title' => $community->title,
                     'content' => $community->content,
                     'likes' => $community->likes,
@@ -43,7 +43,7 @@ class CommunityController extends Controller
             ->map(function ($comment) {
                 return [
                     'id' => $comment->id,
-                    'author' => $comment->author,
+                    'author' => $comment->user ? $comment->user->display_name : $comment->author,
                     'user_id' => $comment->user_id,
                     'content' => $comment->content,
                     'created_at' => $comment->created_at->diffForHumans(),
@@ -53,7 +53,7 @@ class CommunityController extends Controller
 
         $post = [
             'id' => $community->id,
-            'author' => $community->user->name ?? 'Onbekend',
+            'author' => $community->user ? $community->user->display_name : 'Onbekend',
             'title' => $community->title,
             'content' => $community->content,
             'likes' => $community->likes,
@@ -121,7 +121,7 @@ class CommunityController extends Controller
 
             $community->comments()->create([
                 'user_id' => auth()->id(),
-                'author' => auth()->user()->name,
+                'author' => auth()->user()->display_name,
                 'content' => $validated['content'],
             ]);
         } else {

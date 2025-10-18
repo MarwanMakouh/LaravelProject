@@ -20,7 +20,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
+        'birthday',
         'password',
     ];
 
@@ -43,6 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'birthday' => 'date',
             'password' => 'hashed',
         ];
     }
@@ -53,5 +56,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function profile(): HasOne
     {
         return $this->hasOne(UserProfile::class);
+    }
+
+    /**
+     * Geef de weergavenaam terug (username als die bestaat, anders name)
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->username ?? $this->name;
     }
 }
