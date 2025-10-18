@@ -420,6 +420,7 @@
 
         <div class="navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-0">
+                <li class="nav-item"><a class="nav-link" href="{{ url('/news') }}">Nieuws</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/community') }}">Community</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/faq') }}">FAQ</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/contact') }}">Contact</a></li>
@@ -444,6 +445,11 @@
 
             <ul class="navbar-nav ms-auto mb-0">
                 @auth
+                    @if(Auth::user()->is_admin)
+                        <li class="nav-item">
+                            <a href="{{ route('admin.news.index') }}" class="nav-link">Admin Panel</a>
+                        </li>
+                    @endif
                     <li class="nav-item">
                         <a href="{{ route('profile.edit') }}" class="nav-link user-welcome">Welkom, {{ Auth::user()->name }}</a>
                     </li>

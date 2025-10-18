@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NewsController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -21,6 +22,10 @@ Route::post('/community/{id}/comment', [CommunityController::class, 'storeCommen
 Route::view('/faq', 'faq.index')->name('faq.index');
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.form');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+// 📰 News routes (public)
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
 
 // 🎮 Game detail (met API data)
 Route::get('/games/{slug}', [GamesController::class, 'show'])->name('games.show');
@@ -54,5 +59,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit/me', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+});
+
+// 🔐 Admin routes (news management)
+Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::get('/news', [NewsController::class, 'adminIndex'])->name('admin.news.index');
+    Route::get('/news/create', [NewsController::class, 'create'])->name('admin.news.create');
+    Route::post('/news', [NewsController::class, 'store'])->name('admin.news.store');
+    Route::get('/news/{id}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
+    Route::put('/news/{id}', [NewsController::class, 'update'])->name('admin.news.update');
+    Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
 });
 
