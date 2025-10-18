@@ -186,7 +186,7 @@
 
     /* User welcome styling */
     .user-welcome {
-        cursor: default;
+        cursor: pointer;
         white-space: nowrap;
         box-sizing: border-box;
     }
@@ -445,7 +445,7 @@
             <ul class="navbar-nav ms-auto mb-0">
                 @auth
                     <li class="nav-item">
-                        <span class="nav-link user-welcome">Welkom, {{ Auth::user()->name }}</span>
+                        <a href="{{ route('profile.edit') }}" class="nav-link user-welcome">Welkom, {{ Auth::user()->name }}</a>
                     </li>
                     <li class="nav-item">
                         <form method="POST" action="{{ route('logout') }}" style="display: inline; width: 100%;">
