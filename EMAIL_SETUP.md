@@ -22,13 +22,13 @@ Open je `.env` bestand en voeg toe:
 
 ```env
 MAIL_MAILER=smtp
-MAIL_HOST=sandbox.smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=your_mailtrap_username
-MAIL_PASSWORD=your_mailtrap_password
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=gameportaalproject@gmail.com
+MAIL_PASSWORD="hqys xnep nfuf bpjq"
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="noreply@gameportal.com"
-MAIL_FROM_NAME="GamePortal"
+MAIL_FROM_ADDRESS="gameportaalproject@gmail.com"
+MAIL_FROM_NAME="${APP_NAME}"
 
 APP_URL=http://127.0.0.1:8000
 ```
