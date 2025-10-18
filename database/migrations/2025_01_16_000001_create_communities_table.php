@@ -11,25 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('communities', function (Blueprint $table) {
             $table->id();
-            $table->string('commentable_type')->default('App\\Models\\Community');
-            $table->unsignedBigInteger('commentable_id');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('author');
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
             $table->text('content');
+            $table->integer('likes')->default(0);
             $table->timestamps();
 
             // Indexes
-            $table->index(['commentable_type', 'commentable_id'], 'idx_commentable');
             $table->index('user_id', 'idx_user_id');
             $table->index('created_at', 'idx_created_at');
 
             // Foreign key
-            $table->foreign('user_id', 'fk_comments_user_id')
+            $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
-                  ->onDelete('set null');
+                  ->onDelete('cascade');
         });
     }
 
@@ -38,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('communities');
     }
 };

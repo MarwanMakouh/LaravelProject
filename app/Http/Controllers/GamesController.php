@@ -61,7 +61,9 @@ class GamesController extends Controller
             ->get()
             ->map(function ($comment) {
                 return [
+                    'id' => $comment->id,
                     'author' => $comment->author,
+                    'user_id' => $comment->user_id,
                     'content' => $comment->content,
                     'created_at' => $comment->created_at->diffForHumans(),
                 ];

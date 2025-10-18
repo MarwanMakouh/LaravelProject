@@ -37,11 +37,14 @@ class CommunityController extends Controller
 
         // Haal comments uit de database met polymorphic relationship
         $comments = $community->comments()
+            ->with('user')
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($comment) {
                 return [
+                    'id' => $comment->id,
                     'author' => $comment->author,
+                    'user_id' => $comment->user_id,
                     'content' => $comment->content,
                     'created_at' => $comment->created_at->diffForHumans(),
                 ];

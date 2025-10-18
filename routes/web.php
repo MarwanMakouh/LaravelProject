@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\GamesController;
+use App\Http\Controllers\ProfileController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -27,4 +28,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// 👤 Profiel routes
+Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/edit/me', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+});
 
