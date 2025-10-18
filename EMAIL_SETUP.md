@@ -76,7 +76,7 @@ MAIL_PORT=2525
 MAIL_USERNAME=your_mailtrap_username
 MAIL_PASSWORD=your_mailtrap_password
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="noreply@gameportal.com"
+MAIL_FROM_ADDRESS="gameportaalproject@gmail.com"
 MAIL_FROM_NAME="GamePortal"
 ```
 
@@ -99,7 +99,7 @@ MAIL_PORT=587
 MAIL_USERNAME=apikey
 MAIL_PASSWORD=your_sendgrid_api_key
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="noreply@gameportal.com"
+MAIL_FROM_ADDRESS="gameportaalproject@gmail.com"
 MAIL_FROM_NAME="GamePortal"
 ```
 
