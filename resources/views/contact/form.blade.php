@@ -215,7 +215,7 @@
 
     <div class="contact-info">
         <p>Of neem direct contact op via:<br>
-        <strong>info@gameportal.nl</strong></p>
+        <strong>gameportaalproject@gmail.com</strong></p>
     </div>
 </div>
 </div>
