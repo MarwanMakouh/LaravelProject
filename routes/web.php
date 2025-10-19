@@ -10,6 +10,7 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\FaqController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -19,7 +20,7 @@ Route::get('/community/create', [CommunityController::class, 'create'])->name('c
 Route::post('/community', [CommunityController::class, 'store'])->name('community.store');
 Route::get('/community/{id}', [CommunityController::class, 'show'])->name('community.show');
 Route::post('/community/{id}/comment', [CommunityController::class, 'storeComment'])->name('community.comment.store');
-Route::view('/faq', 'faq.index')->name('faq.index');
+Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.form');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
@@ -61,13 +62,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
 });
 
-// 🔐 Admin routes (news management)
+// 🔐 Admin routes (news & faq management)
 Route::middleware('auth')->prefix('admin')->group(function () {
+    // News management
     Route::get('/news', [NewsController::class, 'adminIndex'])->name('admin.news.index');
     Route::get('/news/create', [NewsController::class, 'create'])->name('admin.news.create');
     Route::post('/news', [NewsController::class, 'store'])->name('admin.news.store');
     Route::get('/news/{id}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
     Route::put('/news/{id}', [NewsController::class, 'update'])->name('admin.news.update');
     Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
+
+    // FAQ management
+    Route::get('/faq', [FaqController::class, 'adminIndex'])->name('admin.faq.index');
+    Route::get('/faq/create', [FaqController::class, 'create'])->name('admin.faq.create');
+    Route::post('/faq', [FaqController::class, 'store'])->name('admin.faq.store');
+    Route::get('/faq/{id}/edit', [FaqController::class, 'edit'])->name('admin.faq.edit');
+    Route::put('/faq/{id}', [FaqController::class, 'update'])->name('admin.faq.update');
+    Route::delete('/faq/{id}', [FaqController::class, 'destroy'])->name('admin.faq.destroy');
 });
 
