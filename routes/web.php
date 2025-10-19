@@ -12,6 +12,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FavoriteGameController;
+use App\Http\Controllers\Admin\UserController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -87,5 +88,13 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/faq/{id}/edit', [FaqController::class, 'edit'])->name('admin.faq.edit');
     Route::put('/faq/{id}', [FaqController::class, 'update'])->name('admin.faq.update');
     Route::delete('/faq/{id}', [FaqController::class, 'destroy'])->name('admin.faq.destroy');
+
+    // User management
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 });
 
