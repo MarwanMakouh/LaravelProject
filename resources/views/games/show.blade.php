@@ -325,6 +325,58 @@
         text-decoration: none;
     }
 
+    /* Favorite button styling */
+    .btn-favorite {
+        background-color: transparent;
+        border: 2px solid #ef4444;
+        color: #ef4444;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .btn-favorite:hover {
+        background-color: #ef4444;
+        color: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    .btn-favorite.favorited {
+        background-color: #ef4444;
+        color: #ffffff;
+    }
+
+    .btn-favorite.favorited:hover {
+        background-color: #dc2626;
+        border-color: #dc2626;
+    }
+
+    body.light-theme .btn-favorite {
+        border-color: #dc2626;
+        color: #dc2626;
+    }
+
+    body.light-theme .btn-favorite:hover {
+        background-color: #dc2626;
+        color: #ffffff;
+    }
+
+    body.light-theme .btn-favorite.favorited {
+        background-color: #dc2626;
+        color: #ffffff;
+    }
+
+    .favorite-form {
+        display: inline-block;
+    }
+
     /* Optimize rendering with CSS containment */
     .game-detail-container {
         contain: layout style paint;
@@ -343,8 +395,50 @@
              class="game-banner"
              loading="eager"
              fetchpriority="high">
-        <h1 class="game-title">{{ $game['name'] }}</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <h1 class="game-title" style="margin: 0;">{{ $game['name'] }}</h1>
+
+            @auth
+                @if($isFavorited)
+                    <!-- Remove from favorites -->
+                    <form action="{{ route('favorites.destroy') }}" method="POST" class="favorite-form">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="game_id" value="{{ $gameModel->id }}">
+                        <button type="submit" class="btn-favorite favorited">
+                            ❤️ Favoriet
+                        </button>
+                    </form>
+                @else
+                    <!-- Add to favorites -->
+                    <form action="{{ route('favorites.store') }}" method="POST" class="favorite-form">
+                        @csrf
+                        <input type="hidden" name="game_id" value="{{ $gameModel->id }}">
+                        <input type="hidden" name="game_slug" value="{{ $game['slug'] }}">
+                        <button type="submit" class="btn-favorite">
+                            🤍 Voeg toe aan favorieten
+                        </button>
+                    </form>
+                @endif
+            @else
+                <a href="{{ route('login') }}" class="btn-favorite" style="text-decoration: none;">
+                    🤍 Login voor favorieten
+                </a>
+            @endauth
+        </div>
     </div>
+
+    @if(session('success'))
+        <div style="background-color: #10b981; color: #ffffff; padding: 1rem; border-radius: 5px; margin-bottom: 1rem;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('info'))
+        <div style="background-color: #3b82f6; color: #ffffff; padding: 1rem; border-radius: 5px; margin-bottom: 1rem;">
+            {{ session('info') }}
+        </div>
+    @endif
 
     <!-- Game Info Grid -->
     <div class="game-info-grid">

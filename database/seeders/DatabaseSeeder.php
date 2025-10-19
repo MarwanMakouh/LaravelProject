@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,16 +11,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
         $this->call([
+            // 1. Eerst admin aanmaken
             AdminSeeder::class,
+
+            // 2. Vervolgens reguliere users
+            UserSeeder::class,
+
+            // 3. Dan news articles
             NewsSeeder::class,
+
+            // 4. Games met comments en favorites (vereist users)
+            GameSeeder::class,
+
+            // 5. Als laatste community posts met comments (vereist users)
+            CommunitySeeder::class,
         ]);
+
+        $this->command->info('✅ Database succesvol gevuld met basis data!');
+        $this->command->info('👤 Admin: admin@ehb.be / Password!321');
+        $this->command->info('👤 Test users: john@example.com, sarah@example.com, mike@example.com, emma@example.com, alex@example.com');
+        $this->command->info('🔑 Wachtwoord voor alle test users: password');
     }
 }

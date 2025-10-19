@@ -70,7 +70,10 @@ class GamesController extends Controller
             })
             ->toArray();
 
-        return view('games.show', compact('game', 'gameModel', 'comments'));
+        // Check of de game favoriet is (alleen voor ingelogde gebruikers)
+        $isFavorited = auth()->check() ? auth()->user()->hasFavorited($gameModel->id) : false;
+
+        return view('games.show', compact('game', 'gameModel', 'comments', 'isFavorited'));
     }
 
     public function storeComment(Request $request, $slug)
