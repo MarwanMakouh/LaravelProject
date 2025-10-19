@@ -218,6 +218,7 @@
         <a href="{{ route('admin.news.index') }}" class="admin-nav-link">📰 Nieuws</a>
         <a href="{{ route('admin.faq.index') }}" class="admin-nav-link">❓ FAQ</a>
         <a href="{{ route('admin.users.index') }}" class="admin-nav-link">👥 Gebruikers</a>
+        <a href="{{ route('admin.community.index') }}" class="admin-nav-link">💬 Community</a>
     </div>
 
     <div class="admin-header">

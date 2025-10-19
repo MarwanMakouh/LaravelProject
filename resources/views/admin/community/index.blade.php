@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Gebruikersbeheer - Admin')
+@section('title', 'Community Beheer - Admin')
 
 @section('content')
 <style>
@@ -55,26 +55,6 @@
         color: #000000;
     }
 
-    .btn-primary {
-        background-color: #000000;
-        color: #ffffff !important;
-        border: 2px solid #000000;
-        padding: 0.75rem 1.5rem;
-        border-radius: 5px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .btn-primary:hover {
-        background-color: #ffffff;
-        color: #000000 !important;
-        border-color: #000000;
-        transform: translateY(-2px);
-    }
-
     .alert {
         padding: 15px 20px;
         border-radius: 5px;
@@ -86,24 +66,13 @@
         color: #ffffff;
     }
 
-    .alert-error {
-        background-color: #ef4444;
-        color: #ffffff;
-    }
-
     body.light-theme .alert-success {
         background-color: #d1fae5;
         color: #065f46;
         border: 1px solid #10b981;
     }
 
-    body.light-theme .alert-error {
-        background-color: #fee2e2;
-        color: #991b1b;
-        border: 1px solid #ef4444;
-    }
-
-    .users-table {
+    .community-table {
         width: 100%;
         background-color: #2a2a2a;
         border: 1px solid #444;
@@ -111,20 +80,20 @@
         overflow: hidden;
     }
 
-    body.light-theme .users-table {
+    body.light-theme .community-table {
         background-color: #ffffff;
         border-color: #ddd;
     }
 
-    .users-table thead {
+    .community-table thead {
         background-color: #1a1a1a;
     }
 
-    body.light-theme .users-table thead {
+    body.light-theme .community-table thead {
         background-color: #f3f4f6;
     }
 
-    .users-table th {
+    .community-table th {
         padding: 15px;
         color: #ffffff;
         font-weight: 600;
@@ -132,23 +101,23 @@
         border-bottom: 2px solid #444;
     }
 
-    body.light-theme .users-table th {
+    body.light-theme .community-table th {
         color: #000000;
         border-bottom-color: #ddd;
     }
 
-    .users-table td {
+    .community-table td {
         padding: 15px;
         color: #cccccc;
         border-bottom: 1px solid #333;
     }
 
-    body.light-theme .users-table td {
+    body.light-theme .community-table td {
         color: #333333;
         border-bottom-color: #e5e7eb;
     }
 
-    .users-table tr:last-child td {
+    .community-table tr:last-child td {
         border-bottom: none;
     }
 
@@ -182,43 +151,39 @@
         background-color: #dc2626;
     }
 
-    .badge {
+    .post-title {
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    body.light-theme .post-title {
+        color: #000000;
+    }
+
+    .post-excerpt {
+        color: #999;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    body.light-theme .post-excerpt {
+        color: #666;
+    }
+
+    .comment-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background-color: #374151;
         padding: 4px 8px;
         border-radius: 4px;
         font-size: 12px;
         font-weight: 600;
     }
 
-    .badge-admin {
-        background-color: #6366f1;
-        color: #ffffff;
-    }
-
-    .badge-user {
-        background-color: #6b7280;
-        color: #ffffff;
-    }
-
-    body.light-theme .badge-admin {
-        background-color: #e0e7ff;
-        color: #4338ca;
-    }
-
-    body.light-theme .badge-user {
+    body.light-theme .comment-count {
         background-color: #e5e7eb;
         color: #374151;
-    }
-
-    .badge-verified {
-        background-color: #10b981;
-        color: #ffffff;
-        font-size: 11px;
-        margin-left: 5px;
-    }
-
-    body.light-theme .badge-verified {
-        background-color: #d1fae5;
-        color: #065f46;
     }
 
     .pagination {
@@ -262,8 +227,7 @@
     </div>
 
     <div class="admin-header">
-        <h1>👥 Gebruikersbeheer</h1>
-        <a href="{{ route('admin.users.create') }}" class="btn-primary">+ Nieuwe Gebruiker</a>
+        <h1>💬 Community Beheer</h1>
     </div>
 
     @if(session('success'))
@@ -272,58 +236,42 @@
         </div>
     @endif
 
-    @if(session('error'))
-        <div class="alert alert-error">
-            {{ session('error') }}
-        </div>
-    @endif
-
-    @if($users->isEmpty())
+    @if($communities->isEmpty())
         <p style="text-align: center; color: #999; padding: 40px;">
-            Nog geen gebruikers gevonden.
+            Nog geen community posts gevonden.
         </p>
     @else
-        <table class="users-table">
+        <table class="community-table">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Naam</th>
-                    <th>Email</th>
-                    <th>Username</th>
-                    <th>Rol</th>
+                    <th>Titel & Inhoud</th>
+                    <th>Auteur</th>
+                    <th>Reacties</th>
                     <th>Aangemaakt</th>
                     <th>Acties</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($users as $user)
+                @foreach($communities as $community)
                     <tr>
-                        <td>{{ $user->id }}</td>
+                        <td>{{ $community->id }}</td>
                         <td>
-                            {{ $user->name }}
-                            @if($user->email_verified_at)
-                                <span class="badge badge-verified">✓ Geverifieerd</span>
-                            @endif
+                            <div class="post-title">{{ $community->title }}</div>
+                            <div class="post-excerpt">{{ Str::limit($community->content, 80) }}</div>
                         </td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->username ?? '-' }}</td>
+                        <td>{{ $community->user ? $community->user->name : 'Onbekend' }}</td>
                         <td>
-                            @if($user->is_admin)
-                                <span class="badge badge-admin">Admin</span>
-                            @else
-                                <span class="badge badge-user">Gebruiker</span>
-                            @endif
+                            <span class="comment-count">💬 {{ $community->comments_count }}</span>
                         </td>
-                        <td>{{ $user->created_at->format('d-m-Y') }}</td>
+                        <td>{{ $community->created_at->format('d-m-Y H:i') }}</td>
                         <td>
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn-small btn-edit">Bewerken</a>
-                            @if($user->id !== auth()->id())
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-small btn-delete" onclick="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?')">Verwijderen</button>
-                                </form>
-                            @endif
+                            <a href="{{ route('admin.community.edit', $community->id) }}" class="btn-small btn-edit">Bewerken</a>
+                            <form action="{{ route('admin.community.destroy', $community->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-small btn-delete" onclick="return confirm('Weet je zeker dat je deze community post wilt verwijderen?')">Verwijderen</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
@@ -331,7 +279,7 @@
         </table>
 
         <div class="pagination">
-            {{ $users->links() }}
+            {{ $communities->links() }}
         </div>
     @endif
 </div>
