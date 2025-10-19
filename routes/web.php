@@ -10,6 +10,7 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\FavoriteGameController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -59,6 +60,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit/me', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+});
+
+// ⭐ Favoriete games routes
+Route::middleware('auth')->group(function () {
+    Route::post('/favorites', [FavoriteGameController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites', [FavoriteGameController::class, 'destroy'])->name('favorites.destroy');
 });
 
 // 🔐 Admin routes (news management)
