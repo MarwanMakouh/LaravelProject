@@ -4,20 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Services\RawgApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+    protected $rawgApi;
+
+    public function __construct(RawgApiService $rawgApi)
+    {
+        $this->rawgApi = $rawgApi;
+    }
+
     /**
      * Toon het profiel van een gebruiker (publiek toegankelijk)
      */
     public function show($id)
     {
-        $user = User::with('profile')->findOrFail($id);
+        $user = User::with(['profile', 'favoritedGames'])->findOrFail($id);
 
-        return view('profile.show', compact('user'));
+        // Haal favoriete games op en verrijk met API data
+        $favoriteGames = $user->favoritedGames->map(function ($game) {
+            // Haal game details van de API
+            $apiData = $this->rawgApi->getGameDetails($game->rawg_id);
+
+            // Voeg API data toe aan het game object
+            $game->background_image = $apiData['background_image'] ?? null;
+            $game->rating = $apiData['rating'] ?? null;
+
+            return $game;
+        });
+
+        return view('profile.show', compact('user', 'favoriteGames'));
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\FavoriteGameController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -63,6 +64,13 @@ Route::middleware('auth')->group(function () {
 });
 
 // 🔐 Admin routes (news & faq management)
+// ⭐ Favoriete games routes
+Route::middleware('auth')->group(function () {
+    Route::post('/favorites', [FavoriteGameController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites', [FavoriteGameController::class, 'destroy'])->name('favorites.destroy');
+});
+
+// 🔐 Admin routes (news management)
 Route::middleware('auth')->prefix('admin')->group(function () {
     // News management
     Route::get('/news', [NewsController::class, 'adminIndex'])->name('admin.news.index');

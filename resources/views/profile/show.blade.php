@@ -213,6 +213,105 @@
             font-size: 24px;
         }
     }
+
+    /* Favorite Games styling */
+    .favorite-games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .game-card {
+        background-color: #333333;
+        border: 1px solid #444;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .game-card:hover {
+        transform: translateY(-5px);
+        border-color: #6366f1;
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+    }
+
+    body.light-theme .game-card {
+        background-color: #ffffff;
+        border-color: #ddd;
+    }
+
+    body.light-theme .game-card:hover {
+        border-color: #000000;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .game-card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .game-card-content {
+        padding: 15px;
+        background-color: #2a2a2a;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    body.light-theme .game-card-content {
+        background-color: #f9f9f9;
+    }
+
+    .game-card-name {
+        font-weight: 600;
+        font-size: 16px;
+        color: #ffffff;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+
+    body.light-theme .game-card-name {
+        color: #000000;
+    }
+
+    .game-card-rating {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 14px;
+        color: #fbbf24;
+        font-weight: 600;
+    }
+
+    body.light-theme .game-card-rating {
+        color: #f59e0b;
+    }
+
+    .no-favorites {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+        font-style: italic;
+    }
+
+    body.light-theme .no-favorites {
+        color: #666;
+    }
+
+    @media (max-width: 768px) {
+        .favorite-games-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+    }
 </style>
 
 <div class="profile-container">
@@ -264,7 +363,48 @@
                     Geboortedatum
                 </div>
             @endif
+            <div class="stat-item">
+                <span class="stat-number">{{ $favoriteGames->count() }}</span>
+                Favoriete Games
+            </div>
         </div>
+    </div>
+
+    <!-- Favoriete Games Sectie -->
+    <div class="profile-card">
+        <h2 class="section-title">⭐ Favoriete Games</h2>
+
+        @if($favoriteGames->count() > 0)
+            <div class="favorite-games-grid">
+                @foreach($favoriteGames as $game)
+                    <a href="{{ route('games.show', $game->slug) }}" class="game-card">
+                        @if($game->background_image)
+                            <img src="{{ $game->background_image }}" alt="{{ $game->name }}" class="game-card-image" loading="lazy">
+                        @else
+                            <div class="game-card-image" style="background-color: #1a1a1a; display: flex; align-items: center; justify-content: center; color: #666;">
+                                🎮
+                            </div>
+                        @endif
+                        <div class="game-card-content">
+                            <div class="game-card-name">{{ $game->name }}</div>
+                            @if($game->rating)
+                                <div class="game-card-rating">
+                                    ⭐ {{ number_format($game->rating, 1) }}/5
+                                </div>
+                            @endif
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        @else
+            <div class="no-favorites">
+                @if(Auth::check() && Auth::id() === $user->id)
+                    Je hebt nog geen favoriete games toegevoegd. Bekijk games en klik op het hart icoon om ze toe te voegen!
+                @else
+                    Deze gebruiker heeft nog geen favoriete games toegevoegd.
+                @endif
+            </div>
+        @endif
     </div>
 </div>
 @endsection
