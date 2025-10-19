@@ -13,6 +13,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FavoriteGameController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CommunityController as AdminCommunityController;
 
 // 🌐 Publieke routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -96,5 +97,11 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+    // Community management
+    Route::get('/community', [AdminCommunityController::class, 'index'])->name('admin.community.index');
+    Route::get('/community/{community}/edit', [AdminCommunityController::class, 'edit'])->name('admin.community.edit');
+    Route::put('/community/{community}', [AdminCommunityController::class, 'update'])->name('admin.community.update');
+    Route::delete('/community/{community}', [AdminCommunityController::class, 'destroy'])->name('admin.community.destroy');
 });
 
