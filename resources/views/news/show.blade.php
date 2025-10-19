@@ -8,10 +8,11 @@
         max-width: 900px;
         margin: 0 auto;
         padding: 0 20px;
+        margin-top: 30px;
     }
 
     .news-back {
-        color: #6366f1;
+        color: #ffffff;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
@@ -23,6 +24,15 @@
 
     .news-back:hover {
         gap: 12px;
+        color: #cccccc;
+    }
+
+    body.light-theme .news-back {
+        color: #000000;
+    }
+
+    body.light-theme .news-back:hover {
+        color: #333333;
     }
 
     .news-article {

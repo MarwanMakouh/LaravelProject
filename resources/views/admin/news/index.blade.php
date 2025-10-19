@@ -178,6 +178,11 @@
 </style>
 
 <div class="admin-container">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ route('admin.news.index') }}" class="nav-link" style="display: inline-block; padding: 10px 15px; background: #2a2a2a; border-radius: 5px; margin-right: 10px; text-decoration: none;">📰 Nieuws</a>
+        <a href="{{ route('admin.faq.index') }}" class="nav-link" style="display: inline-block; padding: 10px 15px; background: #2a2a2a; border-radius: 5px; text-decoration: none;">❓ FAQ</a>
+    </div>
+
     <div class="admin-header">
         <h1>📰 Nieuws Beheer</h1>
         <a href="{{ route('admin.news.create') }}" class="btn-primary">+ Nieuw Artikel</a>

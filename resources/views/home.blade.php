@@ -80,6 +80,11 @@
             box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
         }
 
+        body.light-theme .card {
+            background-color: #ffffff;
+            border-color: #ddd;
+        }
+
         body.light-theme .card:hover {
             border-color: #000000;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -92,12 +97,12 @@
         }
 
         .card-info-section {
-            background-color: #333333;
+            background-color: #2a2a2a;
             padding: 1.5rem;
         }
 
         body.light-theme .card-info-section {
-            background-color: #F3F4F6;
+            background-color: #ffffff;
         }
 
         .card-title {

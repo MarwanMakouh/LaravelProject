@@ -28,18 +28,23 @@
     }
 
     .btn-primary {
-        background-color: #6366f1;
-        color: #ffffff;
-        padding: 10px 20px;
-        text-decoration: none;
+        background-color: #000000;
+        color: #ffffff !important;
+        border: 2px solid #000000;
+        padding: 0.75rem 1.5rem;
         border-radius: 5px;
         font-weight: 600;
+        cursor: pointer;
         transition: all 0.3s ease;
+        text-decoration: none;
         display: inline-block;
     }
 
     .btn-primary:hover {
-        background-color: #4f46e5;
+        background-color: #ffffff;
+        color: #000000 !important;
+        border-color: #000000;
+        transform: translateY(-2px);
     }
 
     .alert {
@@ -181,6 +186,11 @@
 </style>
 
 <div class="admin-container">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ route('admin.news.index') }}" class="nav-link" style="display: inline-block; padding: 10px 15px; background: #2a2a2a; border-radius: 5px; margin-right: 10px; text-decoration: none; color: #ffffff;">📰 Nieuws</a>
+        <a href="{{ route('admin.faq.index') }}" class="nav-link" style="display: inline-block; padding: 10px 15px; background: #2a2a2a; border-radius: 5px; text-decoration: none; color: #ffffff;">❓ FAQ</a>
+    </div>
+
     <div class="admin-header">
         <h1>FAQ Beheer</h1>
         <a href="{{ route('admin.faq.create') }}" class="btn-primary">+ Nieuwe FAQ</a>

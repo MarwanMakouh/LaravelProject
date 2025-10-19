@@ -223,7 +223,7 @@
     }
 
     .game-card {
-        background-color: #333333;
+        background-color: #2a2a2a;
         border: 1px solid #444;
         border-radius: 10px;
         overflow: hidden;
@@ -259,15 +259,10 @@
 
     .game-card-content {
         padding: 15px;
-        background-color: #2a2a2a;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-    }
-
-    body.light-theme .game-card-content {
-        background-color: #f9f9f9;
     }
 
     .game-card-name {

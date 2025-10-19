@@ -20,6 +20,7 @@
             flex-direction: column;
             min-height: 100vh;
             background-color: #1a1a1a !important;
+            color: #ffffff;
         }
 
         /* Main container styling */
@@ -30,16 +31,51 @@
             flex: 1;
         }
 
+        /* Default dark theme text colors */
+        h1, h2, h3, h4, h5, h6 {
+            color: #ffffff;
+        }
+
+        p, span, div, label {
+            color: #cccccc;
+        }
+
+        a {
+            color: #6366f1;
+        }
+
+        a:hover {
+            color: #4f46e5;
+        }
+
         /* Light theme styles */
         body.light-theme {
             background-color: #ffffff !important;
+            color: #000000;
         }
 
         body.light-theme h1,
         body.light-theme h2,
+        body.light-theme h3,
         body.light-theme h4,
-        body.light-theme p {
-            color: #000000 !important;
+        body.light-theme h5,
+        body.light-theme h6 {
+            color: #000000;
+        }
+
+        body.light-theme p,
+        body.light-theme span,
+        body.light-theme div,
+        body.light-theme label {
+            color: #333333;
+        }
+
+        body.light-theme a {
+            color: #4338ca;
+        }
+
+        body.light-theme a:hover {
+            color: #3730a3;
         }
 
         body.light-theme .navbar {
