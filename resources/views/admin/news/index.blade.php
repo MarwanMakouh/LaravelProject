@@ -7,6 +7,12 @@
     .admin-container {
         max-width: 1200px;
         margin: 0 auto;
+        padding: 20px;
+    }
+
+    .admin-nav-container {
+        margin-bottom: 30px;
+        margin-top: 20px;
     }
 
     .admin-header {
@@ -23,6 +29,34 @@
     }
 
     body.light-theme .admin-header h1 {
+        color: #000000;
+    }
+
+    .admin-nav-link {
+        display: inline-block;
+        padding: 10px 15px;
+        background: #2a2a2a;
+        border: 1px solid #000000;
+        border-radius: 5px;
+        margin-right: 10px;
+        text-decoration: none;
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+    .admin-nav-link:hover {
+        background: #d1d5db;
+        color: #000000;
+    }
+
+    body.light-theme .admin-nav-link {
+        background: #ffffff;
+        color: #000000;
+        border: 1px solid #000000;
+    }
+
+    body.light-theme .admin-nav-link:hover {
+        background: #d1d5db;
         color: #000000;
     }
 
@@ -178,9 +212,10 @@
 </style>
 
 <div class="admin-container">
-    <div style="margin-bottom: 20px;">
-        <a href="{{ route('admin.news.index') }}" class="nav-link" style="display: inline-block; padding: 10px 15px; background: #2a2a2a; border-radius: 5px; margin-right: 10px; text-decoration: none;">📰 Nieuws</a>
-        <a href="{{ route('admin.faq.index') }}" class="nav-link" style="display: inline-block; padding: 10px 15px; background: #2a2a2a; border-radius: 5px; text-decoration: none;">❓ FAQ</a>
+    <div class="admin-nav-container">
+        <a href="{{ route('admin.news.index') }}" class="admin-nav-link">📰 Nieuws</a>
+        <a href="{{ route('admin.faq.index') }}" class="admin-nav-link">❓ FAQ</a>
+        <a href="{{ route('admin.users.index') }}" class="admin-nav-link">👥 Gebruikers</a>
     </div>
 
     <div class="admin-header">
