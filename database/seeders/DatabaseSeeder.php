@@ -20,12 +20,7 @@ class DatabaseSeeder extends Seeder
 
             // 3. Dan news articles
             NewsSeeder::class,
-
-            // 4. Games met comments en favorites (vereist users)
-            GameSeeder::class,
-
-            // 5. Als laatste community posts met comments (vereist users)
-            CommunitySeeder::class,
+            FaqSeeder::class,
         ]);
 
         $this->command->info('✅ Database succesvol gevuld met basis data!');

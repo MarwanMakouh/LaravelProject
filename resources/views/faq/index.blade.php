@@ -87,6 +87,35 @@
     body.light-theme .faq-answer {
         color: #333333;
     }
+
+    .faq-category {
+        margin-bottom: 40px;
+    }
+
+    .faq-category-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #6366f1;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #6366f1;
+    }
+
+    body.light-theme .faq-category-title {
+        color: #000000;
+        border-bottom-color: #000000;
+    }
+
+    .no-faqs {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+        font-style: italic;
+    }
+
+    body.light-theme .no-faqs {
+        color: #666;
+    }
 </style>
 
 <div class="faq-container">
@@ -95,46 +124,23 @@
         <p>Vind antwoorden op de meest gestelde vragen</p>
     </div>
 
-    <div class="faq-item">
-    <div class="faq-question">Hoe maak ik een account aan?</div>
-    <div class="faq-answer">
-        Klik rechtsboven op "Registreren" en vul het formulier in met je naam, e-mailadres en een wachtwoord. Na registratie ben je direct ingelogd!
-    </div>
-</div>
+    @if($faqsByCategory->isEmpty())
+        <div class="no-faqs">
+            Er zijn momenteel geen FAQ's beschikbaar.
+        </div>
+    @else
+        @foreach($faqsByCategory as $category => $faqs)
+            <div class="faq-category">
+                <h2 class="faq-category-title">{{ $category }}</h2>
 
-<div class="faq-item">
-    <div class="faq-question">Zijn de games gratis?</div>
-    <div class="faq-answer">
-        Op GamePortal vind je informatie over zowel gratis als betaalde games. We geven duidelijk aan of een game gratis te spelen is of een aankoop vereist.
-    </div>
-</div>
-
-<div class="faq-item">
-    <div class="faq-question">Kan ik reviews plaatsen?</div>
-    <div class="faq-answer">
-        Ja! Als je bent ingelogd, kun je bij elke game pagina een reactie plaatsen en je mening delen over de game.
-    </div>
-</div>
-
-<div class="faq-item">
-    <div class="faq-question">Hoe verander ik tussen dark en light mode?</div>
-    <div class="faq-answer">
-        Klik op de thema-knop rechtsboven in de navigatiebalk (☀️/🌙) om te wisselen tussen dark en light mode. Je voorkeur wordt automatisch opgeslagen.
-    </div>
-</div>
-
-<div class="faq-item">
-    <div class="faq-question">Wordt de game informatie regelmatig bijgewerkt?</div>
-    <div class="faq-answer">
-        Ja, we werken onze game database regelmatig bij met de nieuwste releases en updates. Check de Community pagina voor de laatste nieuwtjes!
-    </div>
-</div>
-
-<div class="faq-item">
-    <div class="faq-question">Kan ik spelletjes direct vanaf deze site spelen?</div>
-    <div class="faq-answer">
-        GamePortal is een informatieplatform. We bieden informatie over games, maar de games zelf moeten via de officiële platforms worden gespeeld.
-    </div>
-</div>
+                @foreach($faqs as $faq)
+                    <div class="faq-item">
+                        <div class="faq-question">{{ $faq->question }}</div>
+                        <div class="faq-answer">{{ $faq->answer }}</div>
+                    </div>
+                @endforeach
+            </div>
+        @endforeach
+    @endif
 </div>
 @endsection
