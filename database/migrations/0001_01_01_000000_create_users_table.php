@@ -42,6 +42,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Discard tablespace before dropping to avoid SQLSTATE[HY000]: General error: 1813 Tablespace for table '`gameportal`.`users`' exists.
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
