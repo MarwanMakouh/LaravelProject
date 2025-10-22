@@ -50,7 +50,7 @@
 
         /* Light theme styles */
         body.light-theme {
-            background-color: #ffffff !important;
+            background-color: #f0f0f0 !important;
             color: #000000;
         }
 
@@ -79,7 +79,7 @@
         }
 
         body.light-theme .navbar {
-            background-color: #f0f0f0 !important;
+            background-color: #d0d0d0 !important;
         }
 
         body.light-theme .navbar-brand,

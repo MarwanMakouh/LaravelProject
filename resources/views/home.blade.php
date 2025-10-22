@@ -81,8 +81,8 @@
         }
 
         body.light-theme .card {
-            background-color: #ffffff;
-            border-color: #ddd;
+            background-color: #e0e0e0;
+            border-color: #cccccc;
         }
 
         body.light-theme .card:hover {
@@ -102,7 +102,7 @@
         }
 
         body.light-theme .card-info-section {
-            background-color: #ffffff;
+            background-color: #e0e0e0;
         }
 
         .card-title {
@@ -120,6 +120,10 @@
             color: #cccccc;
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
+        }
+
+        body.light-theme .card-info-section p {
+            color: #333333;
         }
 
         .card-info-section p:last-of-type {
