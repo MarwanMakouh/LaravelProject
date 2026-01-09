@@ -189,6 +189,91 @@
     body.light-theme .password-requirements {
         color: #666;
     }
+
+    /* Client-side validation styles */
+    .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    body.light-theme .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    body.light-theme .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    .validation-message {
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+    }
+
+    .validation-message.error {
+        color: #ff6b6b;
+        display: block;
+    }
+
+    .validation-message.success {
+        color: #10b981;
+        display: block;
+    }
+
+    body.light-theme .validation-message.error {
+        color: #c33;
+    }
+
+    body.light-theme .validation-message.success {
+        color: #10b981;
+    }
+
+    /* Password strength indicator */
+    .password-strength {
+        height: 5px;
+        border-radius: 3px;
+        margin-top: 8px;
+        background: #444;
+        overflow: hidden;
+    }
+
+    body.light-theme .password-strength {
+        background: #e5e5e5;
+    }
+
+    .password-strength-bar {
+        height: 100%;
+        transition: width 0.3s ease, background-color 0.3s ease;
+        width: 0%;
+    }
+
+    .password-strength-bar.weak {
+        width: 33%;
+        background: #ef4444;
+    }
+
+    .password-strength-bar.medium {
+        width: 66%;
+        background: #f59e0b;
+    }
+
+    .password-strength-bar.strong {
+        width: 100%;
+        background: #10b981;
+    }
+
+    .password-strength-text {
+        font-size: 13px;
+        margin-top: 5px;
+        color: #999;
+    }
+
+    body.light-theme .password-strength-text {
+        color: #666;
+    }
 </style>
 
 <div class="auth-wrapper">
@@ -221,6 +306,7 @@
                 autofocus
                 placeholder="Jouw naam"
             >
+            <span class="validation-message" id="name-validation"></span>
             @error('name')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -237,6 +323,7 @@
                 required
                 placeholder="naam@voorbeeld.nl"
             >
+            <span class="validation-message" id="email-validation"></span>
             @error('email')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -252,9 +339,11 @@
                 required
                 placeholder="Minimaal 8 tekens"
             >
-            <div class="password-requirements">
-                Minimaal 8 tekens
+            <div class="password-strength">
+                <div class="password-strength-bar" id="password-strength-bar"></div>
             </div>
+            <div class="password-strength-text" id="password-strength-text"></div>
+            <span class="validation-message" id="password-validation"></span>
             @error('password')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -270,6 +359,7 @@
                 required
                 placeholder="Herhaal je wachtwoord"
             >
+            <span class="validation-message" id="password_confirmation-validation"></span>
         </div>
 
         <button type="submit" class="btn-auth">Registreren</button>
@@ -280,4 +370,204 @@
     </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const passwordConfirmInput = document.getElementById('password_confirmation');
+    const form = document.querySelector('form');
+    const passwordStrengthBar = document.getElementById('password-strength-bar');
+    const passwordStrengthText = document.getElementById('password-strength-text');
+
+    // Email validatie
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Password sterkte berekenen
+    function calculatePasswordStrength(password) {
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (password.length >= 12) strength++;
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+        if (/[0-9]/.test(password)) strength++;
+        if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+        return strength;
+    }
+
+    // Update password strength indicator
+    function updatePasswordStrength(password) {
+        if (password === '') {
+            passwordStrengthBar.className = 'password-strength-bar';
+            passwordStrengthText.textContent = '';
+            return;
+        }
+
+        const strength = calculatePasswordStrength(password);
+
+        passwordStrengthBar.classList.remove('weak', 'medium', 'strong');
+
+        if (strength <= 2) {
+            passwordStrengthBar.classList.add('weak');
+            passwordStrengthText.textContent = 'Zwak wachtwoord';
+            passwordStrengthText.style.color = '#ef4444';
+        } else if (strength <= 3) {
+            passwordStrengthBar.classList.add('medium');
+            passwordStrengthText.textContent = 'Gemiddeld wachtwoord';
+            passwordStrengthText.style.color = '#f59e0b';
+        } else {
+            passwordStrengthBar.classList.add('strong');
+            passwordStrengthText.textContent = 'Sterk wachtwoord';
+            passwordStrengthText.style.color = '#10b981';
+        }
+    }
+
+    // Update veld status
+    function updateFieldStatus(input, isValid, message) {
+        const validationMsg = document.getElementById(input.id + '-validation');
+
+        input.classList.remove('valid', 'invalid');
+        validationMsg.classList.remove('error', 'success');
+
+        if (input.value.trim() === '' && input.id !== 'password_confirmation') {
+            validationMsg.textContent = '';
+            return;
+        }
+
+        if (isValid) {
+            input.classList.add('valid');
+            validationMsg.textContent = '✓ ' + message;
+            validationMsg.classList.add('success');
+        } else {
+            input.classList.add('invalid');
+            validationMsg.textContent = '✗ ' + message;
+            validationMsg.classList.add('error');
+        }
+    }
+
+    // Naam validatie
+    nameInput.addEventListener('input', function() {
+        const name = this.value.trim();
+
+        if (name === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (name.length < 2) {
+            updateFieldStatus(this, false, 'Naam moet minimaal 2 tekens bevatten');
+        } else {
+            updateFieldStatus(this, true, 'Geldige naam');
+        }
+    });
+
+    // Email validatie
+    emailInput.addEventListener('input', function() {
+        const email = this.value.trim();
+
+        if (email === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            updateFieldStatus(this, false, 'Voer een geldig e-mailadres in');
+        } else {
+            updateFieldStatus(this, true, 'Geldig e-mailadres');
+        }
+    });
+
+    // Password validatie met strength indicator
+    passwordInput.addEventListener('input', function() {
+        const password = this.value;
+
+        updatePasswordStrength(password);
+
+        if (password === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (password.length < 8) {
+            updateFieldStatus(this, false, 'Wachtwoord moet minimaal 8 tekens bevatten');
+        } else {
+            updateFieldStatus(this, true, 'Wachtwoord voldoet aan minimale lengte');
+        }
+
+        // Check ook password confirmation als die al is ingevuld
+        if (passwordConfirmInput.value !== '') {
+            validatePasswordConfirmation();
+        }
+    });
+
+    // Password confirmation validatie
+    function validatePasswordConfirmation() {
+        const password = passwordInput.value;
+        const passwordConfirm = passwordConfirmInput.value;
+
+        if (passwordConfirm === '') {
+            updateFieldStatus(passwordConfirmInput, false, '');
+            return;
+        }
+
+        if (password !== passwordConfirm) {
+            updateFieldStatus(passwordConfirmInput, false, 'Wachtwoorden komen niet overeen');
+        } else {
+            updateFieldStatus(passwordConfirmInput, true, 'Wachtwoorden komen overeen');
+        }
+    }
+
+    passwordConfirmInput.addEventListener('input', validatePasswordConfirmation);
+
+    // Form submit validatie
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+
+        // Valideer naam
+        const name = nameInput.value.trim();
+        if (name === '') {
+            updateFieldStatus(nameInput, false, 'Naam is verplicht');
+            isValid = false;
+        } else if (name.length < 2) {
+            updateFieldStatus(nameInput, false, 'Naam moet minimaal 2 tekens bevatten');
+            isValid = false;
+        }
+
+        // Valideer email
+        const email = emailInput.value.trim();
+        if (email === '' || !validateEmail(email)) {
+            updateFieldStatus(emailInput, false, email === '' ? 'E-mailadres is verplicht' : 'Voer een geldig e-mailadres in');
+            isValid = false;
+        }
+
+        // Valideer password
+        const password = passwordInput.value;
+        if (password === '') {
+            updateFieldStatus(passwordInput, false, 'Wachtwoord is verplicht');
+            isValid = false;
+        } else if (password.length < 8) {
+            updateFieldStatus(passwordInput, false, 'Wachtwoord moet minimaal 8 tekens bevatten');
+            isValid = false;
+        }
+
+        // Valideer password confirmation
+        const passwordConfirm = passwordConfirmInput.value;
+        if (passwordConfirm === '') {
+            updateFieldStatus(passwordConfirmInput, false, 'Wachtwoord bevestiging is verplicht');
+            isValid = false;
+        } else if (password !== passwordConfirm) {
+            updateFieldStatus(passwordConfirmInput, false, 'Wachtwoorden komen niet overeen');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
 @endsection

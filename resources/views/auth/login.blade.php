@@ -201,6 +201,47 @@
     body.light-theme .invalid-feedback {
         color: #c33;
     }
+
+    /* Client-side validation styles */
+    .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    body.light-theme .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    body.light-theme .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    .validation-message {
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+    }
+
+    .validation-message.error {
+        color: #ff6b6b;
+        display: block;
+    }
+
+    .validation-message.success {
+        color: #10b981;
+        display: block;
+    }
+
+    body.light-theme .validation-message.error {
+        color: #c33;
+    }
+
+    body.light-theme .validation-message.success {
+        color: #10b981;
+    }
 </style>
 
 <div class="auth-wrapper">
@@ -228,6 +269,7 @@
                 autofocus
                 placeholder="naam@voorbeeld.nl"
             >
+            <span class="validation-message" id="email-validation"></span>
             @error('email')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -243,6 +285,7 @@
                 required
                 placeholder="Voer je wachtwoord in"
             >
+            <span class="validation-message" id="password-validation"></span>
             @error('password')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -273,4 +316,99 @@
     </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const form = document.querySelector('form');
+
+    // Email validatie
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Update veld status
+    function updateFieldStatus(input, isValid, message) {
+        const validationMsg = document.getElementById(input.id + '-validation');
+
+        input.classList.remove('valid', 'invalid');
+        validationMsg.classList.remove('error', 'success');
+
+        if (input.value.trim() === '') {
+            validationMsg.textContent = '';
+            return;
+        }
+
+        if (isValid) {
+            input.classList.add('valid');
+            validationMsg.textContent = '✓ ' + message;
+            validationMsg.classList.add('success');
+        } else {
+            input.classList.add('invalid');
+            validationMsg.textContent = '✗ ' + message;
+            validationMsg.classList.add('error');
+        }
+    }
+
+    // Email input validatie
+    emailInput.addEventListener('input', function() {
+        const email = this.value.trim();
+
+        if (email === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            updateFieldStatus(this, false, 'Voer een geldig e-mailadres in');
+        } else {
+            updateFieldStatus(this, true, 'Geldig e-mailadres');
+        }
+    });
+
+    // Password input validatie
+    passwordInput.addEventListener('input', function() {
+        const password = this.value;
+
+        if (password === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (password.length < 8) {
+            updateFieldStatus(this, false, 'Wachtwoord moet minimaal 8 tekens bevatten');
+        } else {
+            updateFieldStatus(this, true, 'Wachtwoord is lang genoeg');
+        }
+    });
+
+    // Form submit validatie
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+
+        // Valideer email
+        const email = emailInput.value.trim();
+        if (email === '' || !validateEmail(email)) {
+            updateFieldStatus(emailInput, false, email === '' ? 'E-mailadres is verplicht' : 'Voer een geldig e-mailadres in');
+            isValid = false;
+        }
+
+        // Valideer password
+        const password = passwordInput.value;
+        if (password === '') {
+            updateFieldStatus(passwordInput, false, 'Wachtwoord is verplicht');
+            isValid = false;
+        } else if (password.length < 8) {
+            updateFieldStatus(passwordInput, false, 'Wachtwoord moet minimaal 8 tekens bevatten');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
 @endsection

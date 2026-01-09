@@ -164,6 +164,58 @@
         display: block;
         margin-top: 0.25rem;
     }
+
+    /* Client-side validation styles */
+    .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    body.light-theme .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    body.light-theme .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    .validation-message {
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+    }
+
+    .validation-message.error {
+        color: #ff6b6b;
+        display: block;
+    }
+
+    .validation-message.success {
+        color: #10b981;
+        display: block;
+    }
+
+    body.light-theme .validation-message.error {
+        color: #c33;
+    }
+
+    body.light-theme .validation-message.success {
+        color: #10b981;
+    }
+
+    .char-count {
+        font-size: 13px;
+        color: #999;
+        text-align: right;
+        margin-top: 5px;
+    }
+
+    body.light-theme .char-count {
+        color: #666;
+    }
 </style>
 
 <div class="create-container">
@@ -193,6 +245,8 @@
                 maxlength="255"
                 value="{{ old('title') }}"
             >
+            <div class="char-count" id="title-char-count">0 / 255 tekens</div>
+            <span class="validation-message" id="title-validation"></span>
             @error('title')
                 <small class="error">{{ $message }}</small>
             @enderror
@@ -208,6 +262,8 @@
                 required
                 maxlength="5000"
             >{{ old('content') }}</textarea>
+            <div class="char-count" id="content-char-count">0 / 5000 tekens</div>
+            <span class="validation-message" id="content-validation"></span>
             @error('content')
                 <small class="error">{{ $message }}</small>
             @enderror
@@ -219,4 +275,119 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const titleInput = document.getElementById('title');
+    const contentInput = document.getElementById('content');
+    const titleCharCount = document.getElementById('title-char-count');
+    const contentCharCount = document.getElementById('content-char-count');
+    const form = document.querySelector('form');
+
+    // Update veld status
+    function updateFieldStatus(input, isValid, message) {
+        const validationMsg = document.getElementById(input.id + '-validation');
+
+        input.classList.remove('valid', 'invalid');
+        validationMsg.classList.remove('error', 'success');
+
+        if (input.value.trim() === '') {
+            validationMsg.textContent = '';
+            return;
+        }
+
+        if (isValid) {
+            input.classList.add('valid');
+            validationMsg.textContent = '✓ ' + message;
+            validationMsg.classList.add('success');
+        } else {
+            input.classList.add('invalid');
+            validationMsg.textContent = '✗ ' + message;
+            validationMsg.classList.add('error');
+        }
+    }
+
+    // Update character count
+    function updateCharCount(input, counter, maxLength) {
+        const length = input.value.length;
+        counter.textContent = length + ' / ' + maxLength + ' tekens';
+
+        const percentage = (length / maxLength) * 100;
+        if (percentage > 95) {
+            counter.style.color = '#ef4444';
+        } else if (percentage > 80) {
+            counter.style.color = '#f59e0b';
+        } else {
+            counter.style.color = '#999';
+        }
+    }
+
+    // Title validatie
+    titleInput.addEventListener('input', function() {
+        const title = this.value.trim();
+        updateCharCount(this, titleCharCount, 255);
+
+        if (title === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (title.length < 5) {
+            updateFieldStatus(this, false, 'Titel moet minimaal 5 tekens bevatten');
+        } else {
+            updateFieldStatus(this, true, 'Geldige titel');
+        }
+    });
+
+    // Content validatie
+    contentInput.addEventListener('input', function() {
+        const content = this.value.trim();
+        updateCharCount(this, contentCharCount, 5000);
+
+        if (content === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (content.length < 20) {
+            updateFieldStatus(this, false, 'Inhoud moet minimaal 20 tekens bevatten');
+        } else {
+            updateFieldStatus(this, true, 'Geldige inhoud');
+        }
+    });
+
+    // Initial char counts
+    updateCharCount(titleInput, titleCharCount, 255);
+    updateCharCount(contentInput, contentCharCount, 5000);
+
+    // Form submit validatie
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+
+        // Valideer title
+        const title = titleInput.value.trim();
+        if (title === '') {
+            updateFieldStatus(titleInput, false, 'Titel is verplicht');
+            isValid = false;
+        } else if (title.length < 5) {
+            updateFieldStatus(titleInput, false, 'Titel moet minimaal 5 tekens bevatten');
+            isValid = false;
+        }
+
+        // Valideer content
+        const content = contentInput.value.trim();
+        if (content === '') {
+            updateFieldStatus(contentInput, false, 'Inhoud is verplicht');
+            isValid = false;
+        } else if (content.length < 20) {
+            updateFieldStatus(contentInput, false, 'Inhoud moet minimaal 20 tekens bevatten');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
 @endsection

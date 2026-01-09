@@ -248,6 +248,58 @@
     body.light-theme .file-name {
         color: #000000;
     }
+
+    /* Client-side validation styles */
+    .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    body.light-theme .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    body.light-theme .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    .validation-message {
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+    }
+
+    .validation-message.error {
+        color: #ff6b6b;
+        display: block;
+    }
+
+    .validation-message.success {
+        color: #10b981;
+        display: block;
+    }
+
+    body.light-theme .validation-message.error {
+        color: #c33;
+    }
+
+    body.light-theme .validation-message.success {
+        color: #10b981;
+    }
+
+    .char-count {
+        font-size: 13px;
+        color: #999;
+        text-align: right;
+        margin-top: 5px;
+    }
+
+    body.light-theme .char-count {
+        color: #666;
+    }
 </style>
 
 <div class="profile-edit-container">
@@ -308,6 +360,7 @@
                     placeholder="Kies een unieke gebruikersnaam"
                     maxlength="255"
                 >
+                <span class="validation-message" id="username-validation"></span>
                 <p class="help-text">Dit is je unieke gebruikersnaam (optioneel)</p>
             </div>
 
@@ -335,7 +388,8 @@
                     placeholder="Vertel iets over jezelf..."
                     maxlength="1000"
                 >{{ old('about_me', $profile ? $profile->about_me : '') }}</textarea>
-                <p class="help-text">Max 1000 karakters</p>
+                <div class="char-count" id="about-char-count">0 / 1000 tekens</div>
+                <span class="validation-message" id="about_me-validation"></span>
             </div>
 
             <!-- Account Info (Read Only) -->
@@ -365,10 +419,136 @@
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const profilePhotoInput = document.getElementById('profile_photo');
+    const usernameInput = document.getElementById('username');
+    const aboutMeInput = document.getElementById('about_me');
+    const aboutCharCount = document.getElementById('about-char-count');
+    const form = document.querySelector('form');
+
     // Toon geselecteerde bestandsnaam
-    document.getElementById('profile_photo').addEventListener('change', function(e) {
-        const fileName = e.target.files[0]?.name || '';
+    profilePhotoInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const fileName = file?.name || '';
         document.getElementById('file-name').textContent = fileName;
+
+        // Valideer bestandsgrootte (max 2MB)
+        if (file) {
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            if (file.size > maxSize) {
+                alert('Bestand is te groot! Maximum bestandsgrootte is 2MB.');
+                profilePhotoInput.value = '';
+                document.getElementById('file-name').textContent = '';
+            }
+
+            // Valideer bestandstype
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Ongeldig bestandstype! Alleen JPG, PNG en GIF zijn toegestaan.');
+                profilePhotoInput.value = '';
+                document.getElementById('file-name').textContent = '';
+            }
+        }
     });
+
+    // Update veld status
+    function updateFieldStatus(input, isValid, message) {
+        const validationMsg = document.getElementById(input.id + '-validation');
+
+        input.classList.remove('valid', 'invalid');
+        validationMsg.classList.remove('error', 'success');
+
+        if (input.value.trim() === '') {
+            validationMsg.textContent = '';
+            return;
+        }
+
+        if (isValid) {
+            input.classList.add('valid');
+            validationMsg.textContent = '✓ ' + message;
+            validationMsg.classList.add('success');
+        } else {
+            input.classList.add('invalid');
+            validationMsg.textContent = '✗ ' + message;
+            validationMsg.classList.add('error');
+        }
+    }
+
+    // Update character count
+    function updateCharCount() {
+        const length = aboutMeInput.value.length;
+        aboutCharCount.textContent = length + ' / 1000 tekens';
+
+        const percentage = (length / 1000) * 100;
+        if (percentage > 95) {
+            aboutCharCount.style.color = '#ef4444';
+        } else if (percentage > 80) {
+            aboutCharCount.style.color = '#f59e0b';
+        } else {
+            aboutCharCount.style.color = '#999';
+        }
+    }
+
+    // Username validatie (optioneel veld)
+    usernameInput.addEventListener('input', function() {
+        const username = this.value.trim();
+
+        if (username === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (username.length < 3) {
+            updateFieldStatus(this, false, 'Gebruikersnaam moet minimaal 3 tekens bevatten');
+        } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            updateFieldStatus(this, false, 'Alleen letters, cijfers en underscores toegestaan');
+        } else {
+            updateFieldStatus(this, true, 'Geldige gebruikersnaam');
+        }
+    });
+
+    // About me validatie met character counter
+    aboutMeInput.addEventListener('input', function() {
+        updateCharCount();
+
+        const aboutMe = this.value.trim();
+        if (aboutMe !== '' && aboutMe.length > 1000) {
+            updateFieldStatus(this, false, 'Maximaal 1000 tekens toegestaan');
+        } else if (aboutMe !== '') {
+            updateFieldStatus(this, true, 'Geldige beschrijving');
+        }
+    });
+
+    // Initial char count
+    updateCharCount();
+
+    // Form submit validatie
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+
+        // Valideer username (alleen als ingevuld)
+        const username = usernameInput.value.trim();
+        if (username !== '') {
+            if (username.length < 3) {
+                updateFieldStatus(usernameInput, false, 'Gebruikersnaam moet minimaal 3 tekens bevatten');
+                isValid = false;
+            } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                updateFieldStatus(usernameInput, false, 'Alleen letters, cijfers en underscores toegestaan');
+                isValid = false;
+            }
+        }
+
+        // Valideer about me (alleen als ingevuld)
+        const aboutMe = aboutMeInput.value.trim();
+        if (aboutMe.length > 1000) {
+            updateFieldStatus(aboutMeInput, false, 'Maximaal 1000 tekens toegestaan');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
 </script>
 @endsection

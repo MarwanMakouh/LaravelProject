@@ -153,6 +153,58 @@
     body.light-theme .contact-info {
         color: #666;
     }
+
+    /* Client-side validation styles */
+    .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    body.light-theme .form-control.valid {
+        border-color: #10b981 !important;
+    }
+
+    body.light-theme .form-control.invalid {
+        border-color: #ef4444 !important;
+    }
+
+    .validation-message {
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+    }
+
+    .validation-message.error {
+        color: #ff6b6b;
+        display: block;
+    }
+
+    .validation-message.success {
+        color: #10b981;
+        display: block;
+    }
+
+    body.light-theme .validation-message.error {
+        color: #c33;
+    }
+
+    body.light-theme .validation-message.success {
+        color: #10b981;
+    }
+
+    .char-count {
+        font-size: 13px;
+        color: #999;
+        text-align: right;
+        margin-top: 5px;
+    }
+
+    body.light-theme .char-count {
+        color: #666;
+    }
 </style>
 
 <div class="contact-container">
@@ -191,6 +243,7 @@
                 required
                 placeholder="Jouw naam"
             >
+            <span class="validation-message" id="name-validation"></span>
         </div>
 
         <div class="form-group">
@@ -204,6 +257,7 @@
                 required
                 placeholder="naam@voorbeeld.nl"
             >
+            <span class="validation-message" id="email-validation"></span>
         </div>
 
         <div class="form-group">
@@ -217,6 +271,7 @@
                 required
                 placeholder="Waar gaat je bericht over?"
             >
+            <span class="validation-message" id="subject-validation"></span>
         </div>
 
         <div class="form-group">
@@ -227,7 +282,10 @@
                 name="message"
                 required
                 placeholder="Typ hier je bericht..."
+                maxlength="1000"
             >{{ old('message') }}</textarea>
+            <div class="char-count" id="char-count">0 / 1000 tekens</div>
+            <span class="validation-message" id="message-validation"></span>
         </div>
 
         <button type="submit" class="btn-submit">Verstuur bericht</button>
@@ -239,4 +297,172 @@
     </div>
 </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const subjectInput = document.getElementById('subject');
+    const messageInput = document.getElementById('message');
+    const charCount = document.getElementById('char-count');
+    const form = document.querySelector('form');
+
+    // Email validatie
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Update veld status
+    function updateFieldStatus(input, isValid, message) {
+        const validationMsg = document.getElementById(input.id + '-validation');
+
+        input.classList.remove('valid', 'invalid');
+        validationMsg.classList.remove('error', 'success');
+
+        if (input.value.trim() === '') {
+            validationMsg.textContent = '';
+            return;
+        }
+
+        if (isValid) {
+            input.classList.add('valid');
+            validationMsg.textContent = '✓ ' + message;
+            validationMsg.classList.add('success');
+        } else {
+            input.classList.add('invalid');
+            validationMsg.textContent = '✗ ' + message;
+            validationMsg.classList.add('error');
+        }
+    }
+
+    // Update character count
+    function updateCharCount() {
+        const length = messageInput.value.length;
+        charCount.textContent = length + ' / 1000 tekens';
+
+        if (length > 950) {
+            charCount.style.color = '#ef4444';
+        } else if (length > 800) {
+            charCount.style.color = '#f59e0b';
+        } else {
+            charCount.style.color = '#999';
+        }
+    }
+
+    // Naam validatie
+    nameInput.addEventListener('input', function() {
+        const name = this.value.trim();
+
+        if (name === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (name.length < 2) {
+            updateFieldStatus(this, false, 'Naam moet minimaal 2 tekens bevatten');
+        } else {
+            updateFieldStatus(this, true, 'Geldige naam');
+        }
+    });
+
+    // Email validatie
+    emailInput.addEventListener('input', function() {
+        const email = this.value.trim();
+
+        if (email === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            updateFieldStatus(this, false, 'Voer een geldig e-mailadres in');
+        } else {
+            updateFieldStatus(this, true, 'Geldig e-mailadres');
+        }
+    });
+
+    // Subject validatie
+    subjectInput.addEventListener('input', function() {
+        const subject = this.value.trim();
+
+        if (subject === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (subject.length < 3) {
+            updateFieldStatus(this, false, 'Onderwerp moet minimaal 3 tekens bevatten');
+        } else {
+            updateFieldStatus(this, true, 'Geldig onderwerp');
+        }
+    });
+
+    // Message validatie
+    messageInput.addEventListener('input', function() {
+        const message = this.value.trim();
+        updateCharCount();
+
+        if (message === '') {
+            updateFieldStatus(this, false, '');
+            return;
+        }
+
+        if (message.length < 10) {
+            updateFieldStatus(this, false, 'Bericht moet minimaal 10 tekens bevatten');
+        } else {
+            updateFieldStatus(this, true, 'Geldig bericht');
+        }
+    });
+
+    // Initial char count
+    updateCharCount();
+
+    // Form submit validatie
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+
+        // Valideer naam
+        const name = nameInput.value.trim();
+        if (name === '') {
+            updateFieldStatus(nameInput, false, 'Naam is verplicht');
+            isValid = false;
+        } else if (name.length < 2) {
+            updateFieldStatus(nameInput, false, 'Naam moet minimaal 2 tekens bevatten');
+            isValid = false;
+        }
+
+        // Valideer email
+        const email = emailInput.value.trim();
+        if (email === '' || !validateEmail(email)) {
+            updateFieldStatus(emailInput, false, email === '' ? 'E-mailadres is verplicht' : 'Voer een geldig e-mailadres in');
+            isValid = false;
+        }
+
+        // Valideer subject
+        const subject = subjectInput.value.trim();
+        if (subject === '') {
+            updateFieldStatus(subjectInput, false, 'Onderwerp is verplicht');
+            isValid = false;
+        } else if (subject.length < 3) {
+            updateFieldStatus(subjectInput, false, 'Onderwerp moet minimaal 3 tekens bevatten');
+            isValid = false;
+        }
+
+        // Valideer message
+        const message = messageInput.value.trim();
+        if (message === '') {
+            updateFieldStatus(messageInput, false, 'Bericht is verplicht');
+            isValid = false;
+        } else if (message.length < 10) {
+            updateFieldStatus(messageInput, false, 'Bericht moet minimaal 10 tekens bevatten');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
 @endsection
