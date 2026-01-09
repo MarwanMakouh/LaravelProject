@@ -50,11 +50,10 @@ class FaqController extends Controller
             'answer' => 'required|string',
             'category' => 'required|string|max:100',
             'order' => 'nullable|integer|min:0',
-            'is_published' => 'nullable|boolean',
+            'is_published' => 'required|in:0,1',
         ]);
 
-        // Zet is_published default op true als niet meegegeven
-        $validated['is_published'] = $request->has('is_published') ? true : false;
+        // Zet order op 0 als niet ingevuld
         $validated['order'] = $validated['order'] ?? 0;
 
         Faq::create($validated);
@@ -85,10 +84,10 @@ class FaqController extends Controller
             'answer' => 'required|string',
             'category' => 'required|string|max:100',
             'order' => 'nullable|integer|min:0',
-            'is_published' => 'nullable|boolean',
+            'is_published' => 'required|in:0,1',
         ]);
 
-        $validated['is_published'] = $request->has('is_published') ? true : false;
+        // Zet order op 0 als niet ingevuld
         $validated['order'] = $validated['order'] ?? 0;
 
         $faq->update($validated);

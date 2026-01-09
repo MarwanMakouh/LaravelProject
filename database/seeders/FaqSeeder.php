@@ -127,6 +127,8 @@ class FaqSeeder extends Seeder
         ];
 
         foreach ($faqs as $faq) {
+            // Voeg is_published toe als niet aanwezig
+            $faq['is_published'] = $faq['is_published'] ?? true;
             Faq::create($faq);
         }
     }

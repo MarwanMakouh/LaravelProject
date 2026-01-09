@@ -60,7 +60,8 @@
 
             <div class="form-group">
                 <label class="checkbox-label">
-                    <input type="checkbox" name="is_published" class="checkbox-input" {{ old('is_published', $faq->is_published ?? true) ? 'checked' : '' }}>
+                    <input type="hidden" name="is_published" value="0">
+                    <input type="checkbox" name="is_published" class="checkbox-input" value="1" {{ old('is_published', $faq->is_published ?? true) ? 'checked' : '' }}>
                     Gepubliceerd (zichtbaar voor bezoekers)
                 </label>
                 @error('is_published')<p class="error-message">{{ $message }}</p>@enderror
